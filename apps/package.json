@@ -1,0 +1,10 @@
+{
+  "name": "mavora-tech",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "start:dev": "pnpm --filter api start:dev",
+    "build": "turbo build",
+    "lint": "turbo lint"
+  }
+}

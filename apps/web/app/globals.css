@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mavora-navy: #0B1F3A;
+  --color-mavora-blue: #1769FF;
+  --color-mavora-teal: #00C2B8;
+  --color-mavora-charcoal: #17202A;
+  --color-mavora-light: #F4F7FA;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  body {
+    background-color: var(--color-mavora-light);
+    color: var(--color-mavora-charcoal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

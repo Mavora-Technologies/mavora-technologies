@@ -69,17 +69,24 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-mavora-light">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+      
       {/* Hero Section */}
-      <section className="bg-mavora-navy text-white py-20 lg:py-28 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#1769FF_1px,transparent_1px)] [background-size:16px_16px]" />
+      <section className="relative bg-[#EBF3FF] text-slate-900 py-16 lg:py-24 overflow-hidden border-b border-slate-200/80">
+        {/* Background Grids & Ambient Lighting */}
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
+        <div className="absolute top-1/3 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <Badge variant="teal">About Mavora Technologies</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-4">
-              Building Trust Through <span className="text-transparent bg-clip-text bg-gradient-to-r from-mavora-teal to-blue-400">Intelligent Digital Engineering.</span>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
+              About Mavora Technologies
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
+              Building Trust Through <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Intelligent Digital Engineering.</span>
             </h1>
-            <p className="mt-6 text-lg text-slate-300 leading-relaxed">
+            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
               Mavora Technologies Ltd is a forward-thinking technology consulting firm bridging the gap between bold ideas and resilient enterprise execution. We partner with SMEs, enterprises, and institutions across Africa and globally.
             </p>
           </div>
@@ -87,12 +94,14 @@ export default function AboutPage() {
       </section>
 
       {/* Corporate Story / Introduction */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6">
-              <Badge variant="blue">Our Identity</Badge>
-              <h2 className="text-3xl font-bold text-mavora-navy">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800 shadow-sm">
+                Our Identity
+              </span>
+              <h2 className="text-3xl font-bold text-slate-900">
                 Empowering Businesses & Communities in a Rapidly Changing World
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -102,46 +111,48 @@ export default function AboutPage() {
                 Founded with a mission to solve real-world problems, Mavora Technologies combines full-stack software development, AI workflow automation, enterprise cybersecurity, and cloud engineering into cohesive digital platforms.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-mavora-teal shrink-0 mt-1" />
+                <div className="flex items-start gap-3 bg-white/60 p-4 rounded-xl border border-slate-200/80 shadow-sm">
+                  <CheckCircle2 className="h-5 w-5 text-teal-600 shrink-0 mt-1" />
                   <div>
-                    <h3 className="font-semibold text-mavora-navy text-sm">Enterprise-Grade Code</h3>
+                    <h3 className="font-semibold text-slate-900 text-sm">Enterprise-Grade Code</h3>
                     <p className="text-xs text-slate-500">TypeScript strict mode, robust error handling, and clean architectures.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-mavora-teal shrink-0 mt-1" />
+                <div className="flex items-start gap-3 bg-white/60 p-4 rounded-xl border border-slate-200/80 shadow-sm">
+                  <CheckCircle2 className="h-5 w-5 text-teal-600 shrink-0 mt-1" />
                   <div>
-                    <h3 className="font-semibold text-mavora-navy text-sm">Local & Global Reach</h3>
+                    <h3 className="font-semibold text-slate-900 text-sm">Local & Global Reach</h3>
                     <p className="text-xs text-slate-500">Rooted in African innovation, aligned with global technological standards.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-mavora-navy text-white p-8 rounded-2xl shadow-xl space-y-6 border border-slate-800">
-              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
-                <Cpu className="h-8 w-8 text-mavora-teal" />
+            <div className="lg:col-span-5 bg-white/90 backdrop-blur-xl text-slate-900 p-8 rounded-2xl shadow-xl space-y-6 border border-slate-200">
+              <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                <div className="p-2 rounded-xl bg-teal-100 text-teal-700">
+                  <Cpu className="h-6 w-6" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-lg">Mavora Technologies Ltd</h3>
-                  <p className="text-xs text-slate-400">Incorporated Corporate Solution Provider</p>
+                  <h3 className="font-bold text-lg text-slate-900">Mavora Technologies Ltd</h3>
+                  <p className="text-xs text-slate-500">Incorporated Corporate Solution Provider</p>
                 </div>
               </div>
-              <blockquote className="italic text-slate-300 text-sm leading-relaxed">
+              <blockquote className="italic text-slate-700 text-sm leading-relaxed border-l-2 border-blue-600 pl-3">
                 “Turning innovative ideas into powerful digital solutions.”
               </blockquote>
-              <div className="space-y-3 pt-2 text-xs text-slate-400">
-                <div className="flex justify-between">
+              <div className="space-y-3 pt-2 text-xs text-slate-600">
+                <div className="flex justify-between border-b border-slate-100 pb-2">
                   <span>Primary Stack</span>
-                  <span className="text-white font-mono">Next.js, Node.js, Neon PostgreSQL</span>
+                  <span className="text-slate-900 font-mono font-medium">Next.js, Node.js, Neon PostgreSQL</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between border-b border-slate-100 pb-2">
                   <span>Focus Areas</span>
-                  <span className="text-white font-mono">AI, Software, Security, Cloud</span>
+                  <span className="text-slate-900 font-mono font-medium">AI, Software, Security, Cloud</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Architecture</span>
-                  <span className="text-mavora-teal font-mono">Monorepo / ERP-Ready</span>
+                  <span className="text-teal-700 font-mono font-medium">Monorepo / ERP-Ready</span>
                 </div>
               </div>
             </div>
@@ -150,26 +161,26 @@ export default function AboutPage() {
       </section>
 
       {/* Vision & Mission */}
-      <section className="py-20 bg-mavora-light">
+      <section className="py-20 relative bg-white/40 border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Vision Card */}
-            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-              <div className="w-12 h-12 rounded-lg bg-mavora-blue/10 text-mavora-blue flex items-center justify-center mb-6">
+            <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden hover:border-blue-300 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 shadow-inner">
                 <Compass className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-bold text-mavora-navy mb-4">Our Vision</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Vision</h3>
               <p className="text-slate-600 text-base leading-relaxed">
                 “To become a leading technology company that helps businesses and communities grow through intelligent, secure, and innovative digital solutions.”
               </p>
             </div>
 
             {/* Mission Card */}
-            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-              <div className="w-12 h-12 rounded-lg bg-mavora-teal/15 text-teal-800 flex items-center justify-center mb-6">
+            <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden hover:border-teal-300 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-6 shadow-inner">
                 <Target className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-bold text-mavora-navy mb-4">Our Mission</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
               <p className="text-slate-600 text-base leading-relaxed">
                 “To design and deliver reliable AI, software, cybersecurity, and IT solutions that solve real problems, improve efficiency, and create opportunities in a rapidly changing digital world.”
               </p>
@@ -179,11 +190,13 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-20 bg-white">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <Badge variant="teal">Guiding Principles</Badge>
-            <h2 className="text-3xl font-extrabold text-mavora-navy mt-3">Our Core Values</h2>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm mb-3">
+              Guiding Principles
+            </span>
+            <h2 className="text-3xl font-extrabold text-slate-900 mt-2">Our Core Values</h2>
             <p className="text-slate-600 mt-2">These five pillars inform every line of code we write and every solution we architect.</p>
           </div>
 
@@ -191,11 +204,11 @@ export default function AboutPage() {
             {values.map((v, idx) => {
               const Icon = v.icon;
               return (
-                <div key={idx} className="bg-mavora-light/60 p-6 rounded-xl border border-slate-200 text-center flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-mavora-navy text-mavora-teal flex items-center justify-center mb-4">
+                <div key={idx} className="bg-white/95 backdrop-blur-md p-6 rounded-2xl border border-slate-200/80 text-center flex flex-col items-center shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 text-teal-400 flex items-center justify-center mb-4 shadow-sm">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="font-bold text-mavora-navy mb-2">{v.name}</h3>
+                  <h3 className="font-bold text-slate-900 mb-2 text-sm">{v.name}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">{v.description}</p>
                 </div>
               );
@@ -205,19 +218,21 @@ export default function AboutPage() {
       </section>
 
       {/* Technology Philosophy & Approach */}
-      <section className="py-20 bg-mavora-navy text-white">
+      <section className="py-20 relative bg-white/40 border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-12">
-            <Badge variant="teal">Engineering Approach</Badge>
-            <h2 className="text-3xl font-bold mt-3">Our Technology Philosophy</h2>
-            <p className="text-slate-300 mt-2">We construct business software with strict attention to performance, security, and long-term maintainability.</p>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800 shadow-sm mb-3">
+              Engineering Approach
+            </span>
+            <h2 className="text-3xl font-bold text-slate-900 mt-2">Our Technology Philosophy</h2>
+            <p className="text-slate-600 mt-2">We construct business software with strict attention to performance, security, and long-term maintainability.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {philosophyPillars.map((p, idx) => (
-              <div key={idx} className="p-6 rounded-lg bg-slate-800/80 border border-slate-700/60">
-                <h3 className="text-lg font-bold text-mavora-teal mb-2">{p.title}</h3>
-                <p className="text-sm text-slate-300 leading-relaxed">{p.desc}</p>
+              <div key={idx} className="p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:border-blue-300 transition-all">
+                <h3 className="text-lg font-bold text-teal-800 mb-2">{p.title}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{p.desc}</p>
               </div>
             ))}
           </div>
@@ -225,19 +240,29 @@ export default function AboutPage() {
       </section>
 
       {/* Call To Action */}
-      <section className="py-16 bg-white border-t border-slate-200">
+      <section className="py-16 bg-[#EBF3FF] relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-3xl font-extrabold text-mavora-navy">
+          <h2 className="text-3xl font-extrabold text-slate-900">
             Ready to Accelerate Your Digital Growth?
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto">
             Partner with Mavora Technologies to design, build, and deploy high-performing digital systems for your organization.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Button href="/request-project" variant="primary" size="lg">
-              Start a Project <ArrowRight className="ml-2 h-5 w-5" />
+            <Button 
+              href="/request-project" 
+              variant="secondary" 
+              size="md" 
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/25 px-6 py-3 border-0"
+            >
+              Start a Project <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button href="/request-consultation" variant="outline" size="lg">
+            <Button 
+              href="/request-consultation" 
+              variant="ghost" 
+              size="md" 
+              className="text-slate-800 border border-slate-300 bg-white/80 hover:bg-slate-100 hover:border-slate-400 px-6 py-3 shadow-sm"
+            >
               Request a Consultation
             </Button>
           </div>

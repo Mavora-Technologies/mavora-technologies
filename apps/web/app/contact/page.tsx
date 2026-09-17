@@ -90,17 +90,24 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-mavora-light">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+      
       {/* Hero Section */}
-      <section className="bg-mavora-navy text-white py-16 lg:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#1769FF_1px,transparent_1px)] [background-size:16px_16px]" />
+      <section className="relative bg-[#EBF3FF] text-slate-900 py-16 lg:py-24 overflow-hidden border-b border-slate-200/80">
+        {/* Background Grids & Ambient Lighting */}
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
+        <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <Badge variant="teal">Contact Engineering Desk</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-4">
-              Get in Touch with Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-mavora-teal to-blue-400">Technical Team.</span>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
+              Contact Engineering Desk
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
+              Get in Touch with Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Technical Team.</span>
             </h1>
-            <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed">
+            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
               Have a project inquiry, architecture question, or enterprise consulting request? Connect directly with our team in Nairobi or schedule a virtual discovery call.
             </p>
           </div>
@@ -108,28 +115,28 @@ export default function ContactPage() {
       </section>
 
       {/* Main Content Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative bg-white/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             {/* Contact Details Column */}
             <div className="lg:col-span-5 space-y-8">
               <div>
-                <h2 className="text-2xl font-bold text-mavora-navy tracking-tight">Direct Information</h2>
-                <p className="text-xs text-slate-500 mt-1">Reach out directly via email, telephone, or visit our office.</p>
+                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Direct Information</h2>
+                <p className="text-xs text-slate-600 mt-1">Reach out directly via email, telephone, or visit our office.</p>
               </div>
 
               {/* Information Cards */}
               <div className="space-y-4">
                 
                 {/* Office Address */}
-                <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-mavora-navy text-mavora-teal flex items-center justify-center shrink-0">
+                <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-inner">
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div className="text-xs">
-                    <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1">HQ Address</span>
-                    <strong className="text-sm font-bold text-mavora-navy block">Mavora Technologies Ltd</strong>
+                    <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1 text-[10px]">HQ Address</span>
+                    <strong className="text-sm font-bold text-slate-900 block">Mavora Technologies Ltd</strong>
                     <span className="text-slate-600 leading-relaxed block mt-0.5">
                       Wood Garden Road, off Wood Avenue, Kilimani
                     </span>
@@ -137,15 +144,15 @@ export default function ContactPage() {
                 </div>
 
                 {/* Email Address */}
-                <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-mavora-navy text-mavora-teal flex items-center justify-center shrink-0">
+                <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-inner">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div className="text-xs">
-                    <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1">Email Us</span>
+                    <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1 text-[10px]">Email Us</span>
                     <a 
                       href="mailto:info@mavoratechnologies.com" 
-                      className="text-sm font-bold text-mavora-blue hover:underline block"
+                      className="text-sm font-bold text-blue-600 hover:text-blue-800 hover:underline block"
                     >
                       info@mavoratechnologies.com
                     </a>
@@ -154,15 +161,15 @@ export default function ContactPage() {
                 </div>
 
                 {/* Phone */}
-                <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-mavora-navy text-mavora-teal flex items-center justify-center shrink-0">
+                <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-inner">
                     <Phone className="h-5 w-5" />
                   </div>
                   <div className="text-xs">
-                    <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1">Phone / Call Desk</span>
+                    <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1 text-[10px]">Phone / Call Desk</span>
                     <a 
                       href="tel:0799985842" 
-                      className="text-sm font-bold text-mavora-navy hover:text-mavora-blue transition-colors block"
+                      className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors block"
                     >
                       0799 985842
                     </a>
@@ -173,13 +180,14 @@ export default function ContactPage() {
               </div>
 
               {/* SLA Banner */}
-              <div className="p-6 rounded-2xl bg-mavora-navy text-white space-y-4 shadow-md">
-                <div className="flex items-center gap-2 text-mavora-teal font-mono text-xs uppercase tracking-wider">
+              <div className="p-6 rounded-2xl bg-slate-900 text-white space-y-4 shadow-xl border border-slate-800 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-[40px] pointer-events-none" />
+                <div className="flex items-center gap-2 text-teal-400 font-mono text-xs font-bold uppercase tracking-wider relative z-10">
                   <Clock className="h-4 w-4" />
                   <span>Response SLA Guarantee</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  All enterprise inquiries and scope briefing submissions are reviewed directly by our technical leads. You will receive an initial feedback report within <strong className="text-white">24 business hours</strong>.
+                <p className="text-xs text-slate-300 leading-relaxed relative z-10">
+                  All enterprise inquiries and scope briefing submissions are reviewed directly by our technical leads. You will receive an initial feedback report within <strong className="text-white font-bold">24 business hours</strong>.
                 </p>
               </div>
             </div>
@@ -188,32 +196,37 @@ export default function ContactPage() {
             <div className="lg:col-span-7">
               
               {status === 'success' ? (
-                <div className="p-10 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-6">
-                  <div className="w-16 h-16 rounded-full bg-mavora-navy text-mavora-teal flex items-center justify-center mx-auto shadow-md">
+                <div className="p-10 rounded-3xl bg-white/90 backdrop-blur-md border border-slate-200/80 text-center space-y-6 shadow-sm">
+                  <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center mx-auto shadow-inner">
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-mavora-navy">Message Received</h3>
-                    <p className="text-slate-600 text-sm mt-2 max-w-lg mx-auto">
-                      Thank you for reaching out to Mavora Technologies. We have logged your request ({formData.currency} Tier) and sent a confirmation receipt to <strong className="text-mavora-navy">{formData.workEmail}</strong>.
+                    <h3 className="text-2xl font-bold text-slate-900">Message Received</h3>
+                    <p className="text-slate-600 text-sm mt-2 max-w-lg mx-auto leading-relaxed">
+                      Thank you for reaching out to Mavora Technologies. We have logged your request ({formData.currency} Tier) and sent a confirmation receipt to <strong className="text-slate-900">{formData.workEmail}</strong>.
                     </p>
                   </div>
-                  <Button href="/" variant="outline" size="md">
+                  <Button 
+                    href="/" 
+                    variant="ghost" 
+                    size="md"
+                    className="border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 shadow-sm rounded-xl px-6"
+                  >
                     Return to Home
                   </Button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="p-8 rounded-2xl border border-slate-200 bg-white space-y-6 shadow-sm">
+                <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur-md space-y-6 shadow-sm">
                   
                   <div>
-                    <h3 className="text-xl font-bold text-mavora-navy">Send us a Message</h3>
+                    <h3 className="text-xl font-bold text-slate-900">Send us a Message</h3>
                     <p className="text-xs text-slate-500 mt-1">Fill out the parameters below to route your inquiry to the correct engineering team.</p>
                   </div>
 
                   {/* Name & Work Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                         Full Name *
                       </label>
                       <input
@@ -222,12 +235,12 @@ export default function ContactPage() {
                         value={formData.fullName}
                         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                         placeholder="Valary Femy"
-                        className="w-full px-4 py-2.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-mavora-blue text-mavora-navy bg-white"
+                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-300/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                         Corporate Work Email *
                       </label>
                       <input
@@ -236,7 +249,7 @@ export default function ContactPage() {
                         value={formData.workEmail}
                         onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
                         placeholder="valary@company.com"
-                        className="w-full px-4 py-2.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-mavora-blue text-mavora-navy bg-white"
+                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-300/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
                       />
                     </div>
                   </div>
@@ -244,7 +257,7 @@ export default function ContactPage() {
                   {/* Company & Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                         Organization / Business Name
                       </label>
                       <input
@@ -252,12 +265,12 @@ export default function ContactPage() {
                         value={formData.companyName}
                         onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                         placeholder="Enterprise Inc."
-                        className="w-full px-4 py-2.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-mavora-blue text-mavora-navy bg-white"
+                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-300/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                         Phone Number
                       </label>
                       <input
@@ -265,20 +278,20 @@ export default function ContactPage() {
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="0799 000 000"
-                        className="w-full px-4 py-2.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-mavora-blue text-mavora-navy bg-white"
+                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-300/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
                       />
                     </div>
                   </div>
 
                   {/* Inquiry Type */}
                   <div>
-                    <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                       Inquiry Subject / Domain
                     </label>
                     <select
                       value={formData.inquiryType}
                       onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
-                      className="w-full px-4 py-2.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-mavora-blue text-mavora-navy bg-white"
+                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-300/80 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
                     >
                       {INQUIRY_TYPES.map((type) => (
                         <option key={type} value={type}>
@@ -296,14 +309,14 @@ export default function ContactPage() {
                       </label>
 
                       {/* Currency Switcher Toggle */}
-                      <div className="inline-flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200">
+                      <div className="inline-flex items-center p-1 bg-slate-100/80 rounded-xl border border-slate-200/80">
                         <button
                           type="button"
                           onClick={() => handleCurrencyChange('USD')}
-                          className={`px-2.5 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 ${
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all duration-200 flex items-center gap-1.5 ${
                             currency === 'USD'
-                              ? 'bg-mavora-navy text-white shadow-sm'
-                              : 'text-slate-600 hover:text-mavora-navy'
+                              ? 'bg-slate-900 text-white shadow-sm'
+                              : 'text-slate-600 hover:text-slate-900'
                           }`}
                         >
                           <Coins className="w-3 h-3" /> USD ($)
@@ -311,10 +324,10 @@ export default function ContactPage() {
                         <button
                           type="button"
                           onClick={() => handleCurrencyChange('KES')}
-                          className={`px-2.5 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 ${
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all duration-200 flex items-center gap-1.5 ${
                             currency === 'KES'
-                              ? 'bg-mavora-navy text-white shadow-sm'
-                              : 'text-slate-600 hover:text-mavora-navy'
+                              ? 'bg-slate-900 text-white shadow-sm'
+                              : 'text-slate-600 hover:text-slate-900'
                           }`}
                         >
                           <Coins className="w-3 h-3" /> KES (KSh)
@@ -322,16 +335,16 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {BUDGET_RANGES[currency].map((b) => (
                         <button
                           type="button"
                           key={b.id}
                           onClick={() => setFormData({ ...formData, budget: b.id })}
-                          className={`p-3 rounded-lg border text-left text-xs font-bold transition-all ${
+                          className={`p-3.5 rounded-xl border text-left text-xs font-bold transition-all duration-200 ${
                             formData.budget === b.id
-                              ? 'border-mavora-blue bg-blue-50/50 text-mavora-navy ring-1 ring-mavora-blue'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                              ? 'border-blue-600 bg-blue-50/70 text-blue-900 ring-1 ring-blue-600 shadow-2xs'
+                              : 'border-slate-200/80 bg-white text-slate-600 hover:border-blue-300 hover:bg-slate-50/50'
                           }`}
                         >
                           {b.label}
@@ -342,7 +355,7 @@ export default function ContactPage() {
 
                   {/* Message Input */}
                   <div>
-                    <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                       Project Description or Message *
                     </label>
                     <textarea
@@ -351,12 +364,12 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Tell us about your requirements, project timeline, or specific technical challenges..."
-                      className="w-full px-4 py-2.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-mavora-blue text-mavora-navy bg-white"
+                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-300/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
                     />
                   </div>
 
                   {status === 'error' && (
-                    <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+                    <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
                       <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
                       <span>An error occurred while transmitting your message. Please try again or email info@mavoratechnologies.com directly.</span>
                     </div>
@@ -367,7 +380,7 @@ export default function ContactPage() {
                     variant="primary"
                     size="lg"
                     disabled={status === 'submitting'}
-                    className="w-full flex items-center justify-center gap-2"
+                    className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/25 px-6 py-3.5 border-0 rounded-xl transition-all duration-200"
                   >
                     {status === 'submitting' ? (
                       'Transmitting...'

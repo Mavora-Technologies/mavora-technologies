@@ -76,32 +76,48 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-mavora-light">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
       {/* Hero Section */}
-      <section className="bg-mavora-navy text-white py-20 lg:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#1769FF_1px,transparent_1px)] [background-size:16px_16px]" />
+      <section className="relative bg-[#EBF3FF] text-slate-900 py-20 lg:py-28 overflow-hidden border-b border-slate-200/80">
+        {/* Background Grids & Ambient Lighting */}
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
+        <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded bg-mavora-blue/20 text-mavora-teal flex items-center justify-center">
-                <Icon className="h-5 w-5" />
+          <div className="max-w-3xl space-y-5">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shadow-inner">
+                <Icon className="h-6 w-6" />
               </div>
-              <Badge variant="teal">Service Deep Dive</Badge>
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
+                Service Deep Dive
+              </span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
               {service.title}
             </h1>
-            <p className="text-xl text-mavora-teal font-medium">
+            <p className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">
               {service.tagline}
             </p>
-            <p className="text-slate-300 text-base leading-relaxed pt-2">
+            <p className="text-slate-600 text-base leading-relaxed pt-2">
               {service.whatWeProvide}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button href="/request-project" variant="secondary" size="lg">
+              <Button 
+                href="/request-project" 
+                variant="secondary" 
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/25 px-6 py-3 border-0"
+              >
                 Request This Service <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button href="/request-consultation" variant="ghost" size="lg" className="text-white border border-slate-700 hover:border-mavora-teal">
+              <Button 
+                href="/request-consultation" 
+                variant="ghost" 
+                size="lg" 
+                className="text-slate-800 border border-slate-300 bg-white/80 hover:bg-slate-100 hover:border-slate-400 px-6 py-3 shadow-sm"
+              >
                 Book Consultation
               </Button>
             </div>
@@ -110,10 +126,10 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       </section>
 
       {/* Problem vs Solution Statement */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 relative bg-white/40 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-red-50/50 border border-red-200/80 p-8 rounded-xl">
+            <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-3 text-red-700 font-bold text-lg mb-3">
                 <AlertTriangle className="h-6 w-6" />
                 <span>The Challenge</span>
@@ -123,9 +139,9 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
               </p>
             </div>
 
-            <div className="bg-emerald-50/50 border border-emerald-200/80 p-8 rounded-xl">
-              <div className="flex items-center gap-3 text-emerald-800 font-bold text-lg mb-3">
-                <CheckCircle2 className="h-6 w-6 text-mavora-teal" />
+            <div className="bg-teal-50/80 backdrop-blur-sm border border-teal-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 text-teal-800 font-bold text-lg mb-3">
+                <CheckCircle2 className="h-6 w-6 text-teal-600" />
                 <span>The Mavora Solution</span>
               </div>
               <p className="text-slate-700 leading-relaxed text-sm">
@@ -137,35 +153,38 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       </section>
 
       {/* Key Capabilities & Benefits */}
-      <section className="py-20 bg-mavora-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             {/* Key Capabilities */}
-            <div className="lg:col-span-7 bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
-              <h2 className="text-2xl font-bold text-mavora-navy">Key Capabilities</h2>
+            <div className="lg:col-span-7 bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+              <h2 className="text-2xl font-bold text-slate-900">Key Capabilities</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {service.keyCapabilities.map((cap, i) => (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-mavora-light/60 border border-slate-100">
-                    <CheckCircle2 className="h-5 w-5 text-mavora-teal shrink-0 mt-0.5" />
-                    <span className="text-sm font-semibold text-mavora-navy">{cap}</span>
+                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100/80 hover:border-blue-200 transition-colors">
+                    <CheckCircle2 className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
+                    <span className="text-sm font-semibold text-slate-800">{cap}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Strategic Benefits */}
-            <div className="lg:col-span-5 bg-mavora-navy text-white p-8 rounded-xl shadow-lg space-y-6">
-              <h2 className="text-2xl font-bold text-mavora-teal">Strategic Benefits</h2>
-              <ul className="space-y-4">
+            {/* Strategic Benefits (Contrasting Dark Card) */}
+            <div className="lg:col-span-5 bg-slate-900 text-white p-8 rounded-2xl shadow-xl space-y-6 border border-slate-800 relative overflow-hidden">
+              {/* Subtle inner glow for the dark card */}
+              <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
+              
+              <h2 className="text-2xl font-bold text-teal-400 relative z-10">Strategic Benefits</h2>
+              <ul className="space-y-4 relative z-10">
                 {service.benefits.map((benefit, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
-                    <span className="w-2 h-2 rounded-full bg-mavora-teal shrink-0 mt-2" />
+                    <span className="w-2 h-2 rounded-full bg-teal-400 shrink-0 mt-1.5 shadow-[0_0_8px_rgba(45,212,191,0.5)]" />
                     <span>{benefit}</span>
                   </li>
                 ))}
               </ul>
-              <div className="pt-4 border-t border-slate-800">
+              <div className="pt-6 mt-6 border-t border-slate-800 relative z-10">
                 <h3 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Technology Approach</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">{service.techApproach}</p>
               </div>
@@ -176,19 +195,19 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       </section>
 
       {/* Typical Use Cases */}
-      <section className="py-20 bg-white border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative bg-white/40 border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading
             badge="Real-World Impact"
             title="Typical Industry Use Cases"
             subtitle={`How organizations deploy Mavora's ${service.title.toLowerCase()} capabilities.`}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             {service.useCases.map((useCase, i) => (
-              <div key={i} className="p-6 rounded-xl bg-mavora-light/60 border border-slate-200">
-                <span className="text-xs font-mono font-bold text-mavora-blue uppercase tracking-wider">Use Case 0{i + 1}</span>
-                <p className="mt-3 text-sm font-medium text-mavora-navy leading-relaxed">
+              <div key={i} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-blue-300 hover:shadow-md transition-all duration-300">
+                <span className="text-xs font-mono font-bold text-blue-600 uppercase tracking-wider">Use Case 0{i + 1}</span>
+                <p className="mt-3 text-sm font-medium text-slate-800 leading-relaxed">
                   {useCase}
                 </p>
               </div>
@@ -198,8 +217,8 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       </section>
 
       {/* Delivery Process */}
-      <section className="py-20 bg-mavora-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading
             badge="Methodology"
             title="Our Delivery Process"
@@ -207,10 +226,13 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             centered
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             {processSteps.map((step, idx) => (
-              <div key={idx} className="bg-white p-6 rounded-xl border border-slate-200 text-center">
-                <h3 className="text-lg font-bold text-mavora-navy mb-2">{step.title}</h3>
+              <div key={idx} className="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200/80 text-center shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-300">
+                <div className="w-10 h-10 mx-auto rounded-full bg-slate-900 text-teal-400 flex items-center justify-center font-bold text-sm mb-4">
+                  {idx + 1}
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title.replace(/^\d+\.\s/, '')}</h3>
                 <p className="text-xs text-slate-600">{step.desc}</p>
               </div>
             ))}
@@ -220,22 +242,22 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
 
       {/* Frequently Asked Questions */}
       {service.faqs.length > 0 && (
-        <section className="py-20 bg-white border-t border-slate-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-20 relative bg-white/40 border-t border-slate-200/80">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <SectionHeading
               badge="FAQ"
               title="Frequently Asked Questions"
               centered
             />
 
-            <div className="space-y-6">
+            <div className="space-y-4 mt-8">
               {service.faqs.map((faq, i) => (
-                <div key={i} className="p-6 rounded-xl border border-slate-200 bg-mavora-light/30 space-y-2">
-                  <h3 className="text-base font-bold text-mavora-navy flex items-center gap-2">
-                    <HelpCircle className="h-5 w-5 text-mavora-blue shrink-0" />
+                <div key={i} className="p-6 rounded-2xl border border-slate-200/80 bg-white/80 shadow-sm hover:border-blue-200 transition-colors space-y-2">
+                  <h3 className="text-base font-bold text-slate-900 flex items-start gap-3">
+                    <HelpCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
                     {faq.question}
                   </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed pl-7">
+                  <p className="text-slate-600 text-sm leading-relaxed pl-8">
                     {faq.answer}
                   </p>
                 </div>
@@ -246,17 +268,27 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       )}
 
       {/* Call To Action */}
-      <section className="py-16 bg-mavora-navy text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-3xl font-extrabold">Ready to Implement {service.title}?</h2>
-          <p className="text-slate-300 max-w-2xl mx-auto">
+      <section className="py-16 relative bg-[#EBF3FF] border-t border-slate-200/80">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+          <h2 className="text-3xl font-extrabold text-slate-900">Ready to Implement {service.title}?</h2>
+          <p className="text-slate-600 max-w-2xl mx-auto">
             Discuss your requirements with our engineering team and receive a structured execution proposal.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
-            <Button href="/request-project" variant="secondary" size="lg">
+            <Button 
+              href="/request-project" 
+              variant="secondary" 
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/25 px-6 py-3 border-0"
+            >
               Start a Project
             </Button>
-            <Button href="/services" variant="ghost" size="lg" className="text-white border border-slate-700 hover:border-mavora-teal">
+            <Button 
+              href="/services" 
+              variant="ghost" 
+              size="lg" 
+              className="text-slate-800 border border-slate-300 bg-white/80 hover:bg-slate-100 hover:border-slate-400 px-6 py-3 shadow-sm"
+            >
               View All Services
             </Button>
           </div>

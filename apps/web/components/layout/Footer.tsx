@@ -18,13 +18,13 @@ export function Footer() {
           {/* Brand Column */}
           <div className="flex flex-col gap-6">
             <Link href="/" className="inline-block group">
-              <div className="inline-flex items-center bg-white/95 backdrop-blur-md px-5 py-3 rounded-2xl shadow-md border border-slate-200/80 transition-transform duration-300 group-hover:scale-[1.02]">
+              <div className="inline-flex items-center transition-transform duration-300 group-hover:scale-[1.02]">
                 <Image 
                   src="/logo.png" 
                   alt="Mavora Technologies Logo" 
-                  width={240} 
-                  height={90} 
-                  className="h-10 w-auto object-contain"
+                  width={540} 
+                  height={290} 
+                  className="h-20 w-200 object-contain"
                   priority
                 />
               </div>

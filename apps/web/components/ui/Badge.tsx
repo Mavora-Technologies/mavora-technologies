@@ -3,9 +3,10 @@ import React from 'react';
 interface BadgeProps {
   children: React.ReactNode;
   variant?: 'teal' | 'blue' | 'navy';
+  className?: string; // Allow optional custom styling
 }
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = 'teal' }) => {
+export const Badge: React.FC<BadgeProps> = ({ children, variant = 'teal', className = '' }) => {
   const styles = {
     teal: "bg-mavora-teal/15 text-teal-800 border-mavora-teal/30",
     blue: "bg-mavora-blue/10 text-mavora-blue border-mavora-blue/20",
@@ -13,7 +14,7 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = 'teal' }) => {
   };
 
   return (
-    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide border ${styles[variant]}`}>
+    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide border ${styles[variant]} ${className}`}>
       {children}
     </span>
   );

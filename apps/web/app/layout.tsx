@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: 'Mavora Technologies',
     images: [
       {
-        url: `${SITE_URL}/og-image.png`,
+        url: `${SITE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: 'Mavora Technologies - Technology Solutions in Kenya',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: 'Mavora Technologies | Software, AI, Cybersecurity & IT Solutions in Kenya',
     description:
       'Leading technology company in Kenya specializing in custom software, AI, cybersecurity, and cloud IT.',
-    images: [`${SITE_URL}/og-image.png`],
+    images: [`${SITE_URL}/og-image.jpg`],
   },
   alternates: {
     canonical: SITE_URL,

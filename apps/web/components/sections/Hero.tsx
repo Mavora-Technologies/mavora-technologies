@@ -81,7 +81,7 @@ export const Hero: React.FC = () => {
 
             {/* Clear Body Text */}
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Mavora Technologies delivers high-performance software development, business AI automation, zero-trust cybersecurity, and cloud IT infrastructure for enterprises and SMEs across <strong className="text-slate-900 font-semibold">Nairobi, Mombasa, Kisumu, Eldoret, Kisii, Busia, Machakos, Murang'a</strong>, and nationwide.
+              Mavora Technologies delivers high-performance software development, business AI automation, zero-trust cybersecurity, and cloud IT infrastructure for enterprises and SMEs <strong className="text-slate-900 font-semibold"> Locally, and Internationally. </strong>
             </p>
 
             {/* Coverage Tag Snippet */}

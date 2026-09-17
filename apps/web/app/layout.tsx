@@ -8,6 +8,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 // 1. Global Metadata Configuration
 export const metadata: Metadata = {
+  // Required so relative image paths convert to absolute URLs
+  metadataBase: new URL('https://mavoratechnologies.com'),
   title: {
     default: 'Mavora Technologies | Top IT, Software & Cybersecurity Company in Kenya',
     template: '%s | Mavora Technologies Kenya',
@@ -34,11 +36,20 @@ export const metadata: Metadata = {
     title: 'Mavora Technologies | Enterprise IT Solutions in Kenya',
     description: 'Transforming businesses with custom software, AI, and cybersecurity in Nairobi, Mombasa, and across Kenya.',
     siteName: 'Mavora Technologies',
+    images: [
+      {
+        url: '/logo.png', // Resolves to https://mavoratechnologies.com/logo.png
+        width: 1200,
+        height: 630,
+        alt: 'Mavora Technologies Logo',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mavora Technologies | Top IT & Software Company in Kenya',
     description: 'Leading digital transformation with software, AI, and IT support across Kenya.',
+    images: ['/logo.png'],
   },
   alternates: {
     canonical: 'https://mavoratechnologies.com',
@@ -50,7 +61,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 2. Structured Data (Schema.org) for Local SEO
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ITUtility',
@@ -94,7 +104,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`flex flex-col min-h-screen pt-20 ${inter.className}`}>
-        {/* Inject JSON-LD for Local Search Ranking */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

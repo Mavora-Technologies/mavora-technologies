@@ -37,8 +37,9 @@ export const ValueProposition: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-mavora-light">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-mavora-light w-full overflow-hidden">
+      {/* Edge-to-Edge Fluid Container */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20 2xl:px-32">
         <SectionHeading
           badge="Why Mavora"
           title="Technology That Solves Real Business Problems"
@@ -46,16 +47,18 @@ export const ValueProposition: React.FC = () => {
           centered
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-8 pt-6">
           {values.map((v, idx) => {
             const Icon = v.icon;
             return (
-              <div key={idx} className="bg-white p-8 rounded-xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 rounded-lg bg-mavora-navy/5 flex items-center justify-center text-mavora-blue mb-6">
-                  <Icon className="h-6 w-6" />
+              <div key={idx} className="bg-white p-8 rounded-xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-lg bg-mavora-navy/5 flex items-center justify-center text-mavora-blue mb-6">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-mavora-navy mb-3">{v.title}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">{v.description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-mavora-navy mb-3">{v.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{v.description}</p>
               </div>
             );
           })}

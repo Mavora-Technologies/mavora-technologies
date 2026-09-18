@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { PROJECTS_DATA, ProjectItem } from '@/lib/projects-data';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -32,33 +33,45 @@ export default function ProjectsPage() {
     : PROJECTS_DATA.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden w-full">
       
       {/* Hero Section */}
-      <section className="relative bg-[#EBF3FF] text-slate-900 py-20 lg:py-28 overflow-hidden border-b border-slate-200/80">
+      <section className="relative bg-[#EBF3FF] text-slate-900 pt-6 sm:pt-8 lg:pt-10 pb-16 lg:pb-24 overflow-hidden border-b border-slate-200/80 w-full">
         {/* Background Grids & Ambient Lighting */}
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
-              Proven Track Record
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
-              Engineered Solutions. <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Measurable Impact.</span>
-            </h1>
-            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
-              Explore how Mavora Technologies partners with organizations to solve complex operational challenges through full-stack software, custom AI, robust cybersecurity, and scalable cloud architectures.
-            </p>
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
+                Proven Track Record
+              </span>
+              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight text-slate-900">
+                Engineered Solutions. <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Measurable Impact.</span>
+              </h1>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Explore how Mavora Technologies partners with organizations to solve complex operational challenges through full-stack software, custom AI, robust cybersecurity, and scalable cloud architectures.
+              </p>
+            </div>
+            <div className="lg:col-span-5 relative h-[320px] sm:h-[380px] lg:h-[420px] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200/85">
+              <Image
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+                alt="Digital engineering projects and metrics overview"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Filter Tabs & Projects Grid */}
-      <section className="py-20 relative bg-white/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="py-20 relative bg-white/40 w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
           <SectionHeading
             badge="Case Studies"
             title="Featured Engineering Projects"
@@ -181,8 +194,8 @@ export default function ProjectsPage() {
       </section>
 
       {/* Strategic Call to Action */}
-      <section className="py-16 relative bg-[#EBF3FF] border-t border-slate-200/80">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+      <section className="py-16 relative bg-[#EBF3FF] border-t border-slate-200/80 w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 text-center space-y-6 relative z-10">
           <h2 className="text-3xl font-extrabold text-slate-900">Have a Custom Technical Challenge?</h2>
           <p className="text-slate-600 max-w-2xl mx-auto text-base">
             We partner with enterprises to design software architectures from scratch or optimize existing legacy platforms.

@@ -13,7 +13,9 @@ import {
   Sparkles, 
   ShieldCheck, 
   Code, 
-  Cloud 
+  Cloud,
+  Terminal,
+  Cpu
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -27,34 +29,58 @@ export default function InsightsPage() {
   const regularArticles = articles.filter((a) => !a.featured);
 
   return (
-    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden">
       
-      {/* Hero Section */}
-      <section className="relative bg-[#EBF3FF] text-slate-900 py-20 lg:py-28 overflow-hidden border-b border-slate-200/80">
-        {/* Background Grids & Ambient Lighting */}
+      {/* Hero Section - Reduced top spacing & Edge-to-Edge with Tech Unsplash Image */}
+      <section className="relative bg-[#EBF3FF] text-slate-900 py-10 sm:py-14 lg:py-20 overflow-hidden border-b border-slate-200/80">
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
-              Perspectives & Tech Leadership
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
-              Insights into Modern <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Digital Engineering.</span>
-            </h1>
-            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
-              In-depth engineering analyses, architectural guides, and executive perspectives on AI, cloud scalability, cybersecurity, and custom software delivery.
-            </p>
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            <div className="lg:col-span-7 space-y-4">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
+                Perspectives & Tech Leadership
+              </span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
+                Insights into Modern <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Digital Engineering.</span>
+              </h1>
+              <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
+                In-depth engineering analyses, architectural guides, and executive perspectives on AI, cloud scalability, cybersecurity, and custom software delivery.
+              </p>
+            </div>
+
+            {/* Hero Right-Side Tech Workspace Unsplash Image */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 shadow-2xl group">
+                <img 
+                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80" 
+                  alt="Software engineering and technical architecture workspace" 
+                  className="w-full h-64 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-2 text-xs font-mono font-semibold tracking-wide bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700">
+                    <Terminal className="w-4 h-4 text-teal-400" />
+                    <span>Architectural Playbooks</span>
+                  </div>
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-teal-300">
+                    Expert Analysis
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* Featured Insights */}
       {featuredArticles.length > 0 && (
-        <section className="py-20 relative bg-white/40 border-b border-slate-200/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <section className="py-12 lg:py-20 relative bg-white/40 border-b border-slate-200/80">
+          <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
             <div className="flex items-center gap-2 mb-8">
               <Sparkles className="h-5 w-5 text-teal-600" />
               <h2 className="text-xl font-bold text-slate-900">Featured Playbooks</h2>
@@ -64,7 +90,7 @@ export default function InsightsPage() {
               {featuredArticles.map((article) => (
                 <div 
                   key={article.slug}
-                  className="bg-slate-900 text-white rounded-3xl p-8 flex flex-col justify-between border border-slate-800 shadow-xl group hover:border-teal-400/50 transition-all duration-300 relative overflow-hidden"
+                  className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col justify-between border border-slate-800 shadow-xl group hover:border-teal-400/50 transition-all duration-300 relative overflow-hidden"
                 >
                   {/* Subtle inner glow */}
                   <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
@@ -80,13 +106,13 @@ export default function InsightsPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl font-bold text-white group-hover:text-teal-300 transition-colors leading-snug">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-teal-300 transition-colors leading-snug">
                       <Link href={`/insights/${article.slug}`}>
                         {article.title}
                       </Link>
                     </h3>
 
-                    <p className="text-slate-300 text-sm leading-relaxed">
+                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                       {article.excerpt}
                     </p>
                   </div>
@@ -112,15 +138,15 @@ export default function InsightsPage() {
       )}
 
       {/* All Insights Grid */}
-      <section className="py-20 relative bg-white/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="py-12 lg:py-20 relative bg-white/40">
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
           <SectionHeading
             badge="Engineering Library"
             title="Latest Technical Articles"
             subtitle="Explore our practical guides to modern enterprise application development."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 lg:mt-12">
             {articles.map((article) => (
               <div 
                 key={article.slug}
@@ -161,12 +187,12 @@ export default function InsightsPage() {
       </section>
 
       {/* Newsletter / Stay Informed */}
-      <section className="py-16 relative bg-[#EBF3FF] border-t border-slate-200/80">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+      <section className="py-14 lg:py-16 relative bg-[#EBF3FF] border-t border-slate-200/80">
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 text-center space-y-6 relative z-10 max-w-4xl mx-auto">
           <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
             Stay Updated
           </span>
-          <h2 className="text-3xl font-extrabold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             Subscribe to Engineering Insights
           </h2>
           <p className="text-slate-600 max-w-xl mx-auto text-sm leading-relaxed">

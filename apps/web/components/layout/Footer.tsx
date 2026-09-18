@@ -6,20 +6,21 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-[#EBF3FF] text-slate-700 border-t border-slate-200/80 overflow-hidden">
+    <footer className="relative bg-[#EBF3FF] text-slate-700 border-t border-slate-200/80 overflow-hidden w-full">
       {/* Background Grids & Ambient Lighting */}
       <div className="absolute inset-0 opacity-30 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
       <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-teal-400/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container mx-auto max-w-7xl px-6 py-16 lg:py-20 relative z-10">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+      {/* Edge-to-Edge Fluid Container */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20 2xl:px-32 py-16 lg:py-20 relative z-10">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5">
 
           {/* Brand Column */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 2xl:col-span-2">
 
             {/* Logo + Tagline */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
               <Link href="/" className="inline-block group shrink-0">
                 <div className="inline-flex items-center transition-transform duration-300 group-hover:scale-[1.02]">
                   <Image
@@ -33,7 +34,7 @@ export function Footer() {
                 </div>
               </Link>
 
-              <div className="h-9 w-px bg-slate-300/80 shrink-0" />
+              <div className="h-9 w-px bg-slate-300/80 shrink-0 hidden sm:block" />
 
               <p className="text-slate-800 text-xs sm:text-sm font-medium leading-snug italic max-w-[230px]">
                 “Turning innovative ideas into powerful digital solutions.”
@@ -48,7 +49,7 @@ export function Footer() {
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex items-center gap-3 pt-1 flex-wrap">
 
               {/* LinkedIn */}
               <a
@@ -56,7 +57,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm"
+                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300"
               >
                 <svg
                   className="w-4 h-4 fill-current"
@@ -72,7 +73,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm"
+                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300"
               >
                 <svg
                   className="w-4 h-4 fill-current"
@@ -88,7 +89,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm"
+                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300"
               >
                 <svg
                   className="w-4 h-4 fill-current"
@@ -104,7 +105,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
-                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm"
+                className="text-slate-600 hover:text-blue-600 transition-colors bg-white/90 p-2.5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300"
               >
                 <svg
                   className="w-4 h-4 fill-current"
@@ -269,8 +270,8 @@ export function Footer() {
       </div>
 
       {/* Bottom Legal Bar */}
-      <div className="border-t border-slate-200/80 bg-white/50 backdrop-blur-sm py-6 relative z-10">
-        <div className="container mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 text-xs text-slate-500 md:flex-row">
+      <div className="border-t border-slate-200/80 bg-white/50 backdrop-blur-sm py-6 relative z-10 w-full">
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20 2xl:px-32 flex flex-col items-center justify-between gap-4 text-xs text-slate-500 md:flex-row">
           <p>
             &copy; {currentYear} Mavora Technologies Ltd. All rights reserved.
           </p>

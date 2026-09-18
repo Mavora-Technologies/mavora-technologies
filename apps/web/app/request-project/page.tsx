@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { 
   CheckCircle2, 
@@ -16,11 +17,8 @@ import {
   Cloud, 
   Smartphone,
   Sparkles,
-  FileText,
-  Coins
+  FileText
 } from 'lucide-react';
-
-type Currency = 'USD' | 'KES';
 
 const SERVICE_OPTIONS = [
   { id: 'software-dev', label: 'Custom Enterprise Software', icon: Code2, desc: 'Tailored platforms, ERPs, and core business software.' },
@@ -29,21 +27,6 @@ const SERVICE_OPTIONS = [
   { id: 'cloud-it', label: 'Cloud Architecture & Migration', icon: Cloud, desc: 'High-availability infrastructure and DevOps optimization.' },
   { id: 'mobile-dev', label: 'Mobile & Cross-Platform Apps', icon: Smartphone, desc: 'Offline-first, native iOS and Android application builds.' },
 ];
-
-const BUDGET_RANGES: Record<Currency, { id: string; label: string; detail: string }[]> = {
-  USD: [
-    { id: '10k-25k', label: '$10,000 – $25,000', detail: 'Minimum viable product (MVP) or targeted module build.' },
-    { id: '25k-50k', label: '$25,000 – $50,000', detail: 'Full multi-tier application or AI pipeline integration.' },
-    { id: '50k-100k', label: '$50,000 – $100,000', detail: 'Comprehensive enterprise system modernizations.' },
-    { id: '100k-plus', label: '$100,000+', detail: 'Large-scale multi-system transformation & dedicated team.' },
-  ],
-  KES: [
-    { id: '1.3m-3.25m', label: 'KES 1,300,000 – KES 3,250,000', detail: 'Minimum viable product (MVP) or targeted module build.' },
-    { id: '3.25m-6.5m', label: 'KES 3,250,000 – KES 6,500,000', detail: 'Full multi-tier application or AI pipeline integration.' },
-    { id: '6.5m-13m', label: 'KES 6,500,000 – KES 13,000,000', detail: 'Comprehensive enterprise system modernizations.' },
-    { id: '13m-plus', label: 'KES 13,000,000+', detail: 'Large-scale multi-system transformation & dedicated team.' },
-  ],
-};
 
 const TIMEFRAMES = [
   { id: 'immediate', label: 'Immediate (< 1 month)' },
@@ -57,8 +40,6 @@ export default function RequestProjectPage() {
 
   const [formData, setFormData] = useState({
     selectedServices: [] as string[],
-    currency: 'USD' as Currency,
-    budget: '25k-50k',
     timeline: 'quarter',
     projectOverview: '',
     fullName: '',
@@ -67,15 +48,6 @@ export default function RequestProjectPage() {
     phone: '',
     requestNda: true,
   });
-
-  const handleCurrencyChange = (newCurrency: Currency) => {
-    const defaultBudget = BUDGET_RANGES[newCurrency][1].id;
-    setFormData((prev) => ({
-      ...prev,
-      currency: newCurrency,
-      budget: defaultBudget,
-    }));
-  };
 
   const toggleService = (id: string) => {
     setFormData((prev) => {
@@ -109,40 +81,57 @@ export default function RequestProjectPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden w-full flex flex-col">
       
-      {/* Hero Header */}
-      <section className="relative bg-[#EBF3FF] text-slate-900 py-20 lg:py-28 overflow-hidden border-b border-slate-200/80">
+      {/* Hero Header - Reduced top padding & integrated Unsplash image */}
+      <section className="relative bg-[#EBF3FF] text-slate-900 pt-4 sm:pt-6 lg:pt-8 pb-8 lg:pb-12 overflow-hidden border-b border-slate-200/80 w-full">
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
-              Project Initiation
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
-              Scope Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Engineering Build.</span>
-            </h1>
-            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
-              Define your project requirements, select capability domains, and estimate budgets in USD or KES to receive a formal technical roadmap.
-            </p>
+        <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            
+            {/* Left Content */}
+            <div className="lg:col-span-7 space-y-3 sm:space-y-4">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
+                <Sparkles className="w-3.5 h-3.5 text-teal-600" /> Project Initiation
+              </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold tracking-tight leading-tight text-slate-900">
+                Scope Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Engineering Build.</span>
+              </h1>
+              <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-3xl">
+                Define your project requirements and select capability domains to receive a formal technical roadmap.
+              </p>
+            </div>
+
+            {/* Right Tech Image (Unsplash) */}
+            <div className="lg:col-span-5 relative h-[240px] sm:h-[300px] lg:h-[340px] xl:h-[380px] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200/85">
+              <Image
+                src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80"
+                alt="Engineering team coding and planning software architecture"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Main Form Section */}
-      <section className="py-20 relative bg-white/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      {/* Main Form Section - Edge-to-Edge Fluid Layout */}
+      <section className="py-6 sm:py-10 lg:py-14 relative bg-white/40 flex-grow w-full">
+        <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-start">
             
             {/* Form Column */}
-            <div className="lg:col-span-8 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-8 lg:p-10 shadow-sm">
+            <div className="lg:col-span-8 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 sm:p-8 lg:p-10 xl:p-12 shadow-sm">
               
               {/* Progress Bar */}
               {status !== 'success' && (
-                <div className="mb-10 flex items-center justify-between border-b border-slate-200/80 pb-6">
+                <div className="mb-8 sm:mb-10 flex items-center justify-between border-b border-slate-200/80 pb-6">
                   <div className="flex items-center gap-3">
                     <span className={`w-8 h-8 rounded-full flex items-center justify-center font-mono font-bold text-xs ${
                       currentStep === 1 ? 'bg-slate-900 text-teal-400' : 'bg-teal-500 text-white'
@@ -150,7 +139,7 @@ export default function RequestProjectPage() {
                       1
                     </span>
                     <span className={`text-xs font-bold ${currentStep === 1 ? 'text-slate-900' : 'text-slate-400'}`}>
-                      Scope & Budget
+                      Scope & Capabilities
                     </span>
                   </div>
 
@@ -170,14 +159,14 @@ export default function RequestProjectPage() {
               )}
 
               {status === 'success' ? (
-                <div className="p-10 rounded-2xl bg-slate-50/80 border border-slate-200/80 text-center space-y-6">
+                <div className="p-8 sm:p-12 rounded-2xl bg-slate-50/80 border border-slate-200/80 text-center space-y-6">
                   <div className="w-16 h-16 rounded-full bg-slate-900 text-teal-400 flex items-center justify-center mx-auto shadow-md">
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-slate-900">Project Request Received</h3>
                     <p className="text-slate-600 text-sm mt-2 max-w-lg mx-auto leading-relaxed">
-                      Thank you for providing your project parameters ({formData.currency} Budget Tier). A Lead Solution Architect will review your specifications and contact you within 24 business hours.
+                      Thank you for providing your project parameters. A Lead Solution Architect will review your specifications and contact you within 24 business hours.
                     </p>
                   </div>
 
@@ -191,11 +180,11 @@ export default function RequestProjectPage() {
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
                   
-                  {/* Step 1: Capabilities & Multi-Currency Budget */}
+                  {/* Step 1: Capabilities */}
                   {currentStep === 1 && (
-                    <div className="space-y-8">
+                    <div className="space-y-6 sm:space-y-8">
                       
                       {/* Technical Capabilities */}
                       <div>
@@ -213,7 +202,7 @@ export default function RequestProjectPage() {
                                 type="button"
                                 key={srv.id}
                                 onClick={() => toggleService(srv.id)}
-                                className={`p-5 rounded-2xl border text-left transition-all duration-300 flex items-start gap-4 shadow-sm ${
+                                className={`p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 flex items-start gap-4 shadow-sm ${
                                   selected 
                                     ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-600/20' 
                                     : 'border-slate-200/80 bg-white/80 hover:bg-white hover:border-blue-300'
@@ -234,63 +223,10 @@ export default function RequestProjectPage() {
                         </div>
                       </div>
 
-                      {/* Multi-Currency Budget Selection */}
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <label className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wider">
-                            2. Target Investment Range *
-                          </label>
-
-                          {/* Currency Switcher Toggle */}
-                          <div className="inline-flex items-center p-1 bg-slate-100/80 rounded-xl border border-slate-200/80">
-                            <button
-                              type="button"
-                              onClick={() => handleCurrencyChange('USD')}
-                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
-                                formData.currency === 'USD'
-                                  ? 'bg-slate-900 text-white shadow-sm'
-                                  : 'text-slate-600 hover:text-slate-900'
-                              }`}
-                            >
-                              <Coins className="w-3.5 h-3.5" /> USD ($)
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleCurrencyChange('KES')}
-                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
-                                formData.currency === 'KES'
-                                  ? 'bg-slate-900 text-white shadow-sm'
-                                  : 'text-slate-600 hover:text-slate-900'
-                              }`}
-                            >
-                              <Coins className="w-3.5 h-3.5" /> KES (KSh)
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {BUDGET_RANGES[formData.currency].map((b) => (
-                            <button
-                              type="button"
-                              key={b.id}
-                              onClick={() => setFormData({ ...formData, budget: b.id })}
-                              className={`p-4 rounded-2xl border text-left transition-all shadow-sm ${
-                                formData.budget === b.id 
-                                  ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-600' 
-                                  : 'border-slate-200 bg-white hover:border-blue-300'
-                              }`}
-                            >
-                              <span className="text-xs font-bold text-slate-900 block">{b.label}</span>
-                              <span className="text-[11px] text-slate-500 mt-0.5 block">{b.detail}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
                       {/* Execution Timeframe */}
                       <div>
                         <label className="block text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-2">
-                          3. Target Execution Timeframe *
+                          2. Target Execution Timeframe *
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           {TIMEFRAMES.map((t) => (
@@ -327,9 +263,9 @@ export default function RequestProjectPage() {
 
                   {/* Step 2: Details & Briefing */}
                   {currentStep === 2 && (
-                    <div className="space-y-6">
+                    <div className="space-y-5 sm:space-y-6">
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                         <div>
                           <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
                             Full Name *
@@ -359,7 +295,7 @@ export default function RequestProjectPage() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                         <div>
                           <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1">
                             Organization / Company Name
@@ -420,7 +356,7 @@ export default function RequestProjectPage() {
                       {status === 'error' && (
                         <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
                           <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
-                          <span>An error occurred while submitting your brief. Please try again or email info@mavora.co</span>
+                          <span>An error occurred while submitting your brief. Please try again or email info@mavoratechnologies.com</span>
                         </div>
                       )}
 
@@ -457,9 +393,24 @@ export default function RequestProjectPage() {
 
             </div>
 
-            {/* Side Process Panel (Dark Strategic Card) */}
+            {/* Side Process Panel & Secondary Unsplash Tech Card */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800 space-y-6 relative overflow-hidden">
+              
+              {/* Secondary Tech Image (Unsplash) */}
+              <div className="relative h-48 sm:h-56 w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80">
+                <Image
+                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80"
+                  alt="Software development team collaboration and code architecture"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent flex flex-col justify-end p-5">
+                  <span className="text-[10px] font-mono font-bold text-teal-400 uppercase tracking-widest">Enterprise Execution</span>
+                  <p className="text-white text-xs font-medium mt-0.5">Agile delivery pipelines and custom software engineering.</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 space-y-6 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
 
                 <div className="flex items-center gap-2 text-teal-400 font-mono text-xs font-bold uppercase tracking-wider relative z-10 border-b border-slate-800 pb-4">
@@ -488,7 +439,7 @@ export default function RequestProjectPage() {
                     <span className="w-5 h-5 rounded-full bg-slate-800 text-teal-400 flex items-center justify-center font-mono font-bold shrink-0 mt-0.5">3</span>
                     <div>
                       <strong className="text-white block font-semibold mb-0.5">Formal Proposal & Roadmap</strong>
-                      Detailed project estimate in KES or USD, milestone breakdown, and SLA commitments.
+                      Detailed project estimate, milestone breakdown, and SLA commitments.
                     </div>
                   </div>
                 </div>
@@ -512,6 +463,7 @@ export default function RequestProjectPage() {
                   info@mavoratechnologies.com
                 </a>
               </div>
+
             </div>
 
           </div>

@@ -11,13 +11,10 @@ import {
   Send, 
   CheckCircle2, 
   AlertCircle, 
-  Coins,
   MessageSquare,
   Building2,
   Sparkles
 } from 'lucide-react';
-
-type Currency = 'USD' | 'KES';
 
 const INQUIRY_TYPES = [
   'General Inquiry',
@@ -28,23 +25,7 @@ const INQUIRY_TYPES = [
   'Partnerships / Advisory',
 ];
 
-const BUDGET_RANGES: Record<Currency, { id: string; label: string }[]> = {
-  USD: [
-    { id: '10k-25k', label: '$10,000 – $25,000' },
-    { id: '25k-50k', label: '$25,000 – $50,000' },
-    { id: '50k-100k', label: '$50,000 – $100,000' },
-    { id: '100k-plus', label: '$100,000+' },
-  ],
-  KES: [
-    { id: '1.3m-3.25m', label: 'KES 1,300,000 – KES 3,250,000' },
-    { id: '3.25m-6.5m', label: 'KES 3,250,000 – KES 6,500,000' },
-    { id: '6.5m-13m', label: 'KES 6,500,000 – KES 13,000,000' },
-    { id: '13m-plus', label: 'KES 13,000,000+' },
-  ],
-};
-
 export default function ContactPage() {
-  const [currency, setCurrency] = useState<Currency>('USD');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const [formData, setFormData] = useState({
@@ -53,20 +34,8 @@ export default function ContactPage() {
     companyName: '',
     phone: '',
     inquiryType: INQUIRY_TYPES[0],
-    currency: 'USD' as Currency,
-    budget: '25k-50k',
     message: '',
   });
-
-  const handleCurrencyChange = (newCurrency: Currency) => {
-    setCurrency(newCurrency);
-    const defaultBudget = BUDGET_RANGES[newCurrency][1].id;
-    setFormData((prev) => ({
-      ...prev,
-      currency: newCurrency,
-      budget: defaultBudget,
-    }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,34 +59,60 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden">
       
-      {/* Hero Section */}
-      <section className="relative bg-[#EBF3FF] text-slate-900 py-16 lg:py-24 overflow-hidden border-b border-slate-200/80">
+      {/* Hero Section - Optimized Spacing & Edge-to-Edge with Professional Office Image */}
+      <section className="relative bg-[#EBF3FF] text-slate-900 py-10 sm:py-14 lg:py-20 overflow-hidden border-b border-slate-200/80">
         {/* Background Grids & Ambient Lighting */}
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
-              Contact Engineering Desk
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
-              Get in Touch with Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Technical Team.</span>
-            </h1>
-            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-              Have a project inquiry, architecture question, or enterprise consulting request? Connect directly with our team in Nairobi or schedule a virtual discovery call.
-            </p>
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Hero Left Content */}
+            <div className="lg:col-span-7 space-y-5">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
+                Contact Engineering Desk
+              </span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
+                Get in Touch with Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Technical Team.</span>
+              </h1>
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                Have a project inquiry, architecture question, or enterprise consulting request? Connect directly with our team in Nairobi or schedule a virtual discovery call.
+              </p>
+            </div>
+
+            {/* Hero Right-Side Professional Office Image */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 shadow-2xl group">
+                <img 
+                  src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80" 
+                  alt="Mavora Technologies modern office workspace" 
+                  className="w-full h-64 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-2 text-xs font-mono font-semibold tracking-wide bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700">
+                    <Building2 className="w-4 h-4 text-teal-400" />
+                    <span>Kilimani, Nairobi HQ</span>
+                  </div>
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-teal-300">
+                    24h Response SLA
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* Main Content Section */}
-      <section className="py-20 relative bg-white/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <section className="py-14 lg:py-20 relative bg-white/40">
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
             {/* Contact Details Column */}
             <div className="lg:col-span-5 space-y-8">
@@ -203,7 +198,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-2xl font-bold text-slate-900">Message Received</h3>
                     <p className="text-slate-600 text-sm mt-2 max-w-lg mx-auto leading-relaxed">
-                      Thank you for reaching out to Mavora Technologies. We have logged your request ({formData.currency} Tier) and sent a confirmation receipt to <strong className="text-slate-900">{formData.workEmail}</strong>.
+                      Thank you for reaching out to Mavora Technologies. We have logged your request and sent a confirmation receipt to <strong className="text-slate-900">{formData.workEmail}</strong>.
                     </p>
                   </div>
                   <Button 
@@ -299,58 +294,6 @@ export default function ContactPage() {
                         </option>
                       ))}
                     </select>
-                  </div>
-
-                  {/* Multi-Currency Budget Tier Selector */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-xs font-mono font-bold text-slate-700 uppercase tracking-wider">
-                        Estimated Budget Range
-                      </label>
-
-                      {/* Currency Switcher Toggle */}
-                      <div className="inline-flex items-center p-1 bg-slate-100/80 rounded-xl border border-slate-200/80">
-                        <button
-                          type="button"
-                          onClick={() => handleCurrencyChange('USD')}
-                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all duration-200 flex items-center gap-1.5 ${
-                            currency === 'USD'
-                              ? 'bg-slate-900 text-white shadow-sm'
-                              : 'text-slate-600 hover:text-slate-900'
-                          }`}
-                        >
-                          <Coins className="w-3 h-3" /> USD ($)
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleCurrencyChange('KES')}
-                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all duration-200 flex items-center gap-1.5 ${
-                            currency === 'KES'
-                              ? 'bg-slate-900 text-white shadow-sm'
-                              : 'text-slate-600 hover:text-slate-900'
-                          }`}
-                        >
-                          <Coins className="w-3 h-3" /> KES (KSh)
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {BUDGET_RANGES[currency].map((b) => (
-                        <button
-                          type="button"
-                          key={b.id}
-                          onClick={() => setFormData({ ...formData, budget: b.id })}
-                          className={`p-3.5 rounded-xl border text-left text-xs font-bold transition-all duration-200 ${
-                            formData.budget === b.id
-                              ? 'border-blue-600 bg-blue-50/70 text-blue-900 ring-1 ring-blue-600 shadow-2xs'
-                              : 'border-slate-200/80 bg-white text-slate-600 hover:border-blue-300 hover:bg-slate-50/50'
-                          }`}
-                        >
-                          {b.label}
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Message Input */}

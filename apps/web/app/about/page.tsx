@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { 
   Target, 
   Compass, 
@@ -69,39 +69,51 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden w-full">
       
       {/* Hero Section */}
-      <section className="relative bg-[#EBF3FF] text-slate-900 py-16 lg:py-24 overflow-hidden border-b border-slate-200/80">
+      <section className="relative bg-[#EBF3FF] text-slate-900 pt-28 sm:pt-32 lg:pt-36 pb-16 lg:pb-24 overflow-hidden border-b border-slate-200/80 w-full">
         {/* Background Grids & Ambient Lighting */}
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/3 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md mb-4">
-              About Mavora Technologies
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mt-2 text-slate-900">
-              Building Trust Through <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Intelligent Digital Engineering.</span>
-            </h1>
-            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
-              Mavora Technologies Ltd is a forward-thinking technology consulting firm bridging the gap between bold ideas and resilient enterprise execution. We partner with SMEs, enterprises, and institutions across Africa and globally.
-            </p>
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
+                About Mavora Technologies
+              </span>
+              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight text-slate-900">
+                Building Trust Through <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700">Intelligent Digital Engineering.</span>
+              </h1>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Mavora Technologies Ltd is a forward-thinking technology consulting firm bridging the gap between bold ideas and resilient enterprise execution. We partner with SMEs, enterprises, and institutions across Africa and globally.
+              </p>
+            </div>
+            <div className="lg:col-span-5 relative h-[320px] sm:h-[380px] lg:h-[420px] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200/80">
+              <Image
+                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80"
+                alt="Technology team collaborating on digital engineering solutions"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Corporate Story / Introduction */}
-      <section className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="py-20 relative w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800 shadow-sm">
                 Our Identity
               </span>
-              <h2 className="text-3xl font-bold text-slate-900">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
                 Empowering Businesses & Communities in a Rapidly Changing World
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -161,37 +173,57 @@ export default function AboutPage() {
       </section>
 
       {/* Vision & Mission */}
-      <section className="py-20 relative bg-white/40 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative bg-white/40 border-y border-slate-200/80 w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Vision Card */}
-            <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden hover:border-blue-300 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 shadow-inner">
-                <Compass className="h-6 w-6" />
+            <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden hover:border-blue-300 transition-all flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 shadow-inner">
+                  <Compass className="h-6 w-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Vision</h3>
+                <p className="text-slate-600 text-base leading-relaxed">
+                  “To become a leading technology company that helps businesses and communities grow through intelligent, secure, and innovative digital solutions.”
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Vision</h3>
-              <p className="text-slate-600 text-base leading-relaxed">
-                “To become a leading technology company that helps businesses and communities grow through intelligent, secure, and innovative digital solutions.”
-              </p>
+              <div className="mt-8 relative h-48 w-full rounded-xl overflow-hidden shadow-inner">
+                <Image
+                  src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80"
+                  alt="Futuristic digital network vision"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
 
             {/* Mission Card */}
-            <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden hover:border-teal-300 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-6 shadow-inner">
-                <Target className="h-6 w-6" />
+            <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden hover:border-teal-300 transition-all flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-6 shadow-inner">
+                  <Target className="h-6 w-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
+                <p className="text-slate-600 text-base leading-relaxed">
+                  “To design and deliver reliable AI, software, cybersecurity, and IT solutions that solve real problems, improve efficiency, and create opportunities in a rapidly changing digital world.”
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
-              <p className="text-slate-600 text-base leading-relaxed">
-                “To design and deliver reliable AI, software, cybersecurity, and IT solutions that solve real problems, improve efficiency, and create opportunities in a rapidly changing digital world.”
-              </p>
+              <div className="mt-8 relative h-48 w-full rounded-xl overflow-hidden shadow-inner">
+                <Image
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+                  alt="Team executing tech mission and strategy"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Core Values */}
-      <section className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm mb-3">
               Guiding Principles
@@ -218,30 +250,43 @@ export default function AboutPage() {
       </section>
 
       {/* Technology Philosophy & Approach */}
-      <section className="py-20 relative bg-white/40 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-12">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800 shadow-sm mb-3">
-              Engineering Approach
-            </span>
-            <h2 className="text-3xl font-bold text-slate-900 mt-2">Our Technology Philosophy</h2>
-            <p className="text-slate-600 mt-2">We construct business software with strict attention to performance, security, and long-term maintainability.</p>
-          </div>
+      <section className="py-20 relative bg-white/40 border-y border-slate-200/80 w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-5 relative h-[360px] sm:h-[420px] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200/80">
+              <Image
+                src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80"
+                alt="Advanced software engineering and code architecture"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+              />
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {philosophyPillars.map((p, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:border-blue-300 transition-all">
-                <h3 className="text-lg font-bold text-teal-800 mb-2">{p.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{p.desc}</p>
+            <div className="lg:col-span-7 space-y-6">
+              <div>
+                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800 shadow-sm mb-3">
+                  Engineering Approach
+                </span>
+                <h2 className="text-3xl font-bold text-slate-900 mt-2">Our Technology Philosophy</h2>
+                <p className="text-slate-600 mt-2">We construct business software with strict attention to performance, security, and long-term maintainability.</p>
               </div>
-            ))}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                {philosophyPillars.map((p, idx) => (
+                  <div key={idx} className="p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:border-blue-300 transition-all">
+                    <h3 className="text-lg font-bold text-teal-800 mb-2">{p.title}</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">{p.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Call To Action */}
-      <section className="py-16 bg-[#EBF3FF] relative">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+      <section className="py-16 bg-[#EBF3FF] relative w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 text-center space-y-6">
           <h2 className="text-3xl font-extrabold text-slate-900">
             Ready to Accelerate Your Digital Growth?
           </h2>

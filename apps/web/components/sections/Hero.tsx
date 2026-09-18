@@ -43,11 +43,11 @@ export const Hero: React.FC = () => {
   }
 
   return (
-    <section className="relative bg-[#EBF3FF] text-slate-900 overflow-hidden pt-6 pb-16 lg:pt-10 lg:pb-24">
-      
+    <section className="relative bg-[#EBF3FF] text-slate-900 overflow-hidden pt-6 pb-16 lg:pt-12 lg:pb-24 w-full">
+
       {/* 1. Background Image Layer */}
-      <div 
-        className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center bg-no-repeat pointer-events-none opacity-10" 
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-teal-500/5 to-transparent pointer-events-none"
       />
 
       {/* 2. Soft Ambient Lighting & Grids for Light Theme */}
@@ -55,12 +55,13 @@ export const Hero: React.FC = () => {
       <div className="absolute top-1/3 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
+      {/* Edge-to-Edge Fluid Container */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20 2xl:px-32 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
           {/* Copy Content Column */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            
+
             {/* Clean Light-Theme Badge */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
@@ -70,9 +71,9 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Headline with Vibrant Gradient Text */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.2]">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.2]">
               Empowering Businesses With <br className="hidden sm:inline" />
-              <span 
+              <span
                 className={`inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-700 to-indigo-700 transition-all duration-1000 transform ${animationClasses}`}
               >
                 {offerings[currentIndex]}
@@ -80,7 +81,7 @@ export const Hero: React.FC = () => {
             </h1>
 
             {/* Clear Body Text */}
-            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
               Mavora Technologies delivers high-performance software development, business AI automation, zero-trust cybersecurity, and cloud IT infrastructure for enterprises and SMEs <strong className="text-slate-900 font-semibold"> Locally, and Internationally. </strong>
             </p>
 
@@ -92,18 +93,18 @@ export const Hero: React.FC = () => {
 
             {/* High-Visibility CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <Button 
-                href="/request-project" 
-                variant="secondary" 
-                size="md" 
+              <Button
+                href="/request-project"
+                variant="secondary"
+                size="md"
                 className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/25 hover:scale-[1.02] transition-all duration-300 text-sm px-6 py-3 border-0"
               >
                 Start a Project <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button 
-                href="/services" 
-                variant="ghost" 
-                size="md" 
+              <Button
+                href="/services"
+                variant="ghost"
+                size="md"
                 className="w-full sm:w-auto text-slate-800 border border-slate-300 bg-white/80 hover:bg-slate-100 hover:border-slate-400 transition-all duration-300 text-sm px-6 py-3 shadow-sm"
               >
                 Explore Our Services
@@ -113,8 +114,8 @@ export const Hero: React.FC = () => {
 
           {/* Interactive Advanced Technology Visual Column (Clean Light Glass Card) */}
           <div className="lg:col-span-5 relative flex justify-center">
-            <div className="relative w-full max-w-sm aspect-square rounded-2xl bg-white/90 border border-slate-200/80 p-5 sm:p-6 shadow-[0_20px_50px_rgba(37,99,235,0.12)] backdrop-blur-2xl flex flex-col justify-between group hover:border-blue-400 transition-all duration-500">
-              
+            <div className="relative w-full max-w-md aspect-square rounded-2xl bg-white/90 border border-slate-200/80 p-5 sm:p-6 shadow-[0_20px_50px_rgba(37,99,235,0.12)] backdrop-blur-2xl flex flex-col justify-between group hover:border-blue-400 transition-all duration-500">
+
               {/* Terminal Header */}
               <div className="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div className="flex gap-2">
@@ -133,7 +134,7 @@ export const Hero: React.FC = () => {
 
               {/* Node Architecture Interactive Grid */}
               <div className="grid grid-cols-2 gap-3 my-auto">
-                
+
                 {/* Card 1 */}
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center gap-2.5 hover:bg-blue-50/50 hover:border-teal-300 hover:-translate-y-1 transition-all duration-300 cursor-default shadow-sm">
                   <div className="p-1.5 rounded-lg bg-teal-100 text-teal-700 shadow-inner">

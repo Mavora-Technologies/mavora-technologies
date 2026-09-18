@@ -14,8 +14,9 @@ export const HowWeWork: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-mavora-light">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-mavora-light w-full overflow-hidden">
+      {/* Edge-to-Edge Fluid Container */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20 2xl:px-32">
         <SectionHeading
           badge="Execution Methodology"
           title="How We Deliver Value"
@@ -23,9 +24,9 @@ export const HowWeWork: React.FC = () => {
           centered
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-8 gap-6 pt-6">
           {steps.map((s, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+            <div key={idx} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between hover:border-blue-300 transition-all duration-300">
               <span className="text-4xl font-extrabold text-slate-100 absolute top-3 right-4 select-none">
                 {s.step}
               </span>

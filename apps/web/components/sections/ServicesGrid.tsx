@@ -16,8 +16,9 @@ export const ServicesGrid: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-white border-y border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-white border-y border-slate-200 w-full overflow-hidden">
+      {/* Edge-to-Edge Fluid Container */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20 2xl:px-32">
         <SectionHeading
           badge="Core Capabilities"
           title="Our Technology Services"
@@ -25,11 +26,11 @@ export const ServicesGrid: React.FC = () => {
           centered
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-8 gap-6 pt-6">
           {services.map((s, idx) => {
             const Icon = s.icon;
             return (
-              <div key={idx} className="group p-6 rounded-xl border border-slate-200 bg-mavora-light/40 hover:border-mavora-blue hover:bg-white transition-all flex flex-col justify-between">
+              <div key={idx} className="group p-6 rounded-xl border border-slate-200 bg-mavora-light/40 hover:border-mavora-blue hover:bg-white transition-all flex flex-col justify-between shadow-sm">
                 <div>
                   <div className="w-12 h-12 rounded-lg bg-mavora-blue/10 text-mavora-blue flex items-center justify-center mb-5 group-hover:bg-mavora-blue group-hover:text-white transition-colors">
                     <Icon className="h-6 w-6" />
@@ -41,7 +42,7 @@ export const ServicesGrid: React.FC = () => {
                   href={`/services/${s.slug}`}
                   className="inline-flex items-center text-sm font-semibold text-mavora-blue hover:text-mavora-navy transition-colors mt-auto"
                 >
-                  Learn More <ArrowRight className="ml-1.5 h-4 w-4" />
+                  Learn More <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
             );

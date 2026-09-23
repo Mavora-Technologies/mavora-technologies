@@ -2,19 +2,19 @@
   "version": 2,
   "builds": [
     {
-      "src": "apps/api/src/server.ts",
+      "src": "src/server.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "apps/api/src/server.ts"
+      "dest": "src/server.ts"
     }
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "https://mavoratechnologies.com" },

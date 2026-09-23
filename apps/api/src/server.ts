@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
 import projectsRouter from './routes/projects';
 import insightsRouter from './routes/insights';
 import leadsRouter from './routes/leads';
@@ -8,43 +7,42 @@ import { projectRequests } from './db/schema';
 
 const app = express();
 
-// 1. Allowed origins
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://mavoratechnologies.com',
-  'https://www.mavoratechnologies.com',
-  'https://mavora-technologies.pages.dev',
-];
+// 1. Raw CORS Middleware (Runs BEFORE any database connection or routing)
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://mavoratechnologies.com',
+    'https://www.mavoratechnologies.com',
+    'https://mavora-technologies.pages.dev',
+  ];
 
-// 2. CORS setup
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow non-browser requests (curl, server-to-server)
-      if (!origin) return callback(null, true);
+  if (origin && (allowedOrigins.includes(origin) || origin.endsWith('.mavora-technologies.pages.dev'))) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://mavoratechnologies.com');
+  }
 
-      if (
-        allowedOrigins.includes(origin) ||
-        origin.endsWith('.mavora-technologies.pages.dev')
-      ) {
-        return callback(null, true);
-      }
-      return callback(null, false);
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    credentials: true,
-  })
-);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+
+  // Immediately fulfill browser preflight checks
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  next();
+});
 
 app.use(express.json());
 
-// 3. Health Check
+// 2. Health Check
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', message: 'Mavora API is running' });
 });
 
-// 4. API Routes
+// 3. API Routes
 app.use('/api/projects', projectsRouter);
 app.use('/api/insights', insightsRouter);
 app.use('/api/leads', leadsRouter);
@@ -113,12 +111,12 @@ app.post('/api/consultation/request', async (req: Request, res: Response) => {
   }
 });
 
-// 5. 404 Handler
+// 4. 404 Handler
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, message: 'API route not found' });
 });
 
-// 6. Global Error Handler
+// 5. Global Error Handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Unhandled API Error:', err);
   res.status(500).json({ success: false, message: err.message || 'Internal server error' });

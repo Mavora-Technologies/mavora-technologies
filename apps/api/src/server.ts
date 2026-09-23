@@ -131,13 +131,19 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ success: false, message: 'Internal server error' });
 });
 
-// 6. Server Initialization
+// 6. Server Initialization & Vercel Serverless Export
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Mavora API Server running at http://localhost:${PORT}`);
-  console.log(`   - Projects: http://localhost:${PORT}/api/projects`);
-  console.log(`   - Insights: http://localhost:${PORT}/api/insights`);
-  console.log(`   - Leads:    http://localhost:${PORT}/api/leads`);
-  console.log(`   - Project Requests: http://localhost:${PORT}/api/projects/request`);
-  console.log(`   - Consultation Requests: http://localhost:${PORT}/api/consultation/request`);
-});
+
+// Only spin up the listener locally; Vercel handles invocation through the default export
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Mavora API Server running at http://localhost:${PORT}`);
+    console.log(`   - Projects: http://localhost:${PORT}/api/projects`);
+    console.log(`   - Insights: http://localhost:${PORT}/api/insights`);
+    console.log(`   - Leads:    http://localhost:${PORT}/api/leads`);
+    console.log(`   - Project Requests: http://localhost:${PORT}/api/projects/request`);
+    console.log(`   - Consultation Requests: http://localhost:${PORT}/api/consultation/request`);
+  });
+}
+
+export default app;

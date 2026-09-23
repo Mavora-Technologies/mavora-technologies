@@ -18,16 +18,23 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.includes(origin)) {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+    
+    // Check exact list or allow any Cloudflare Pages deployment subdomain dynamically
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.mavora-technologies.pages.dev')) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // Pass false gracefully instead of throwing an Error object 
+      // This prevents the preflight request from failing with a missing header crash
+      callback(null, false);
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());

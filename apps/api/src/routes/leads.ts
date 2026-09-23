@@ -12,11 +12,11 @@ router.post('/', async (req: Request, res: Response) => {
     const body = req.body || {};
     
     const fullName = body.fullName || body.name;
-    const email = body.email || body.workEmail;
-    const company = body.company || body.companyName;
+    const email = body.workEmail || body.email;
+    const company = body.companyName || body.company;
     const phone = body.phone;
-    const service = body.service || body.inquiryType || 'General Inquiry';
-    const message = body.message;
+    const service = body.service || body.inquiryType || body.inquirySubject || 'General Inquiry';
+    const message = body.projectOverview || body.message;
 
     // Validation checks
     if (!fullName || typeof fullName !== 'string' || fullName.trim() === '') {
@@ -40,7 +40,7 @@ router.post('/', async (req: Request, res: Response) => {
       });
     }
 
-    // Insert using Drizzle ORM
+    // Insert using Drizzle ORM matching your exact leads table schema columns
     const [newLead] = await db.insert(leads).values({
       fullName: fullName.trim(),
       email: email.trim().toLowerCase(),
@@ -57,6 +57,7 @@ router.post('/', async (req: Request, res: Response) => {
       message: 'Thank you for reaching out! Your message has been received.',
       data: newLead,
     });
+
   } catch (error: any) {
     console.error('❌ Database Error saving lead via Drizzle:', error);
     return res.status(500).json({

@@ -1,3 +1,4 @@
+// apps/api/src/server.ts
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import projectsRouter from './routes/projects';
@@ -9,7 +10,26 @@ import { projectRequests } from './db/schema';
 const app = express();
 
 // 1. Core Middlewares
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'https://mavoratechnologies.com', 
+  'https://www.mavoratechnologies.com', 
+  'https://mavora-technologies.pages.dev'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // 2. Health Check / Root Endpoint
@@ -58,7 +78,7 @@ app.post('/api/projects/request', async (req: Request, res: Response) => {
   }
 });
 
-// Consultation Request Endpoint (Added to fix your 404 error)
+// Consultation Request Endpoint
 app.post('/api/consultation/request', async (req: Request, res: Response) => {
   try {
     const { 
@@ -78,8 +98,6 @@ app.post('/api/consultation/request', async (req: Request, res: Response) => {
 
     console.log('Consultation request received:', req.body);
 
-    // If you want to save this to your database later, you can add your Drizzle insert here.
-
     return res.status(201).json({ 
       success: true, 
       message: 'Consultation request received successfully' 
@@ -97,6 +115,11 @@ app.use((_req: Request, res: Response) => {
 
 // 5. Global Error Handling Middleware
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  // Catch CORS errors specifically so they return clean JSON instead of an HTML stack trace
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({ success: false, message: 'CORS origin not allowed' });
+  }
+  
   console.error('Unhandled API Error:', err);
   res.status(500).json({ success: false, message: 'Internal server error' });
 });

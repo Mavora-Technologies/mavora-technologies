@@ -1,20 +1,22 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import * as postgres from 'postgres';
 import * as schema from './schema';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
-dotenv.config();
+const connectionString = process.env.DATABASE_URL;
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/mavora_dev';
+if (!connectionString) {
+  console.error('⚠️ DATABASE_URL environment variable is missing!');
+}
 
-const pool = new Pool({
-  connectionString,
-  ssl: connectionString.includes('neon.tech') ? { rejectUnauthorized: false } : undefined,
-});
+// Ensure postgres driver handles both default and namespace module exports
+const postgresClient = (postgres.default || postgres) as unknown as typeof postgres.default;
 
-export const db = drizzle(pool, { schema });
+const client = postgresClient(
+  connectionString || 'postgresql://placeholder:placeholder@localhost:5432/placeholder',
+  {
+    max: 1,
+    prepare: false,
+  }
+);
+
+export const db = drizzle(client, { schema });

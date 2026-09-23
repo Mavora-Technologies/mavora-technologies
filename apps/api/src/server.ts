@@ -8,28 +8,34 @@ import { projectRequests } from './db/schema';
 
 const app = express();
 
-// 1. Configure allowed origins (supports exact strings and regex)
+// 1. Allowed origins
 const allowedOrigins = [
   'http://localhost:3000',
   'https://mavoratechnologies.com',
   'https://www.mavoratechnologies.com',
   'https://mavora-technologies.pages.dev',
-  /\.mavora-technologies\.pages\.dev$/ // Matches any Cloudflare preview deployment
 ];
 
-const corsOptions: cors.CorsOptions = {
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
+// 2. CORS setup
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow non-browser requests (curl, server-to-server)
+      if (!origin) return callback(null, true);
 
-// 2. Apply CORS middleware
-app.use(cors(corsOptions));
-
-// Explicitly handle preflight OPTIONS requests across all routes
-app.options('*', cors(corsOptions));
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.mavora-technologies.pages.dev')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -115,7 +121,15 @@ app.use((_req: Request, res: Response) => {
 // 6. Global Error Handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Unhandled API Error:', err);
-  res.status(500).json({ success: false, message: 'Internal server error' });
+  res.status(500).json({ success: false, message: err.message || 'Internal server error' });
 });
+
+const PORT = process.env.PORT || 5000;
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Mavora API Server running at http://localhost:${PORT}`);
+  });
+}
 
 export default app;

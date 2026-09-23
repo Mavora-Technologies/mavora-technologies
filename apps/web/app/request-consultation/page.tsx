@@ -67,7 +67,8 @@ export default function RequestConsultationPage() {
     setStatus('submitting');
 
     try {
-      const response = await fetch('/api/consultation/request', {
+      // Direct connection to Express backend on port 5000 (bypassing Next.js proxy 404)
+      const response = await fetch('http://localhost:5000/api/consultation/request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

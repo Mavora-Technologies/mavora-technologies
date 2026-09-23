@@ -269,11 +269,11 @@ export const Navbar: React.FC = () => {
               {/* Right */}
               <div className="flex items-center gap-6 font-medium">
                 <a
-                  href="tel:+254799985842"
+                  href="tel:+254795707823"
                   className="flex items-center gap-2 hover:text-white transition-colors"
                 >
                   <Phone className="w-3.5 h-3.5 text-mavora-teal" />
-                  +254 (0) 799 985 842
+                  +254 (0) 795 707 823
                 </a>
 
                 <div className="h-3 w-px bg-slate-700" />
@@ -887,11 +887,11 @@ export const Navbar: React.FC = () => {
           {/* Contact Details */}
           <div className="flex flex-col items-center justify-center gap-1.5 mt-3 text-[11px] text-slate-500">
             <a
-              href="tel:+254799985842"
+              href="tel:+254795707823"
               className="flex items-center gap-1 text-slate-800 hover:text-mavora-navy transition-colors font-bold text-[11px]"
             >
               <Phone className="w-3 h-3 text-mavora-teal shrink-0" />
-              +254 799 985 842
+              +254 (0) 795 707 823
             </a>
             <a
               href="mailto:info@mavoratechnologies.com"

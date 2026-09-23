@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { fetchApi } from '@/lib/api'; // 1. Import our centralized API client
 import { 
   Mail, 
   Phone, 
@@ -41,14 +42,25 @@ export default function ContactPage() {
     e.preventDefault();
     setStatus('submitting');
 
+    // 2. Map frontend fields to match backend schema requirements
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.workEmail,
+      company: formData.companyName,
+      phone: formData.phone,
+      service: formData.inquiryType,
+      message: formData.message,
+      source: 'Website Contact Form',
+    };
+
     try {
-      const response = await fetch('/api/contact', {
+      // 3. Send request directly to your Express backend /api/leads endpoint
+      const res = await fetchApi('/leads', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
+      if (res.success) {
         setStatus('success');
       } else {
         setStatus('error');
@@ -61,17 +73,14 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden">
       
-      {/* Hero Section - Optimized Spacing & Edge-to-Edge with Professional Office Image */}
+      {/* Hero Section */}
       <section className="relative bg-[#EBF3FF] text-slate-900 py-10 sm:py-14 lg:py-20 overflow-hidden border-b border-slate-200/80">
-        {/* Background Grids & Ambient Lighting */}
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" /> 
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
-            {/* Hero Left Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">             
             <div className="lg:col-span-7 space-y-5">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">
                 Contact Engineering Desk
@@ -83,8 +92,7 @@ export default function ContactPage() {
                 Have a project inquiry, architecture question, or enterprise consulting request? Connect directly with our team in Nairobi or schedule a virtual discovery call.
               </p>
             </div>
-
-            {/* Hero Right-Side Professional Office Image */}
+      
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 shadow-2xl group">
                 <img 
@@ -119,13 +127,9 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Direct Information</h2>
                 <p className="text-xs text-slate-600 mt-1">Reach out directly via email, telephone, or visit our office.</p>
-              </div>
-
-              {/* Information Cards */}
+              </div>  
               <div className="space-y-4">
-                
-                {/* Office Address */}
-                <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">
+                <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">  
                   <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-inner">
                     <MapPin className="h-5 w-5" />
                   </div>
@@ -138,43 +142,33 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Email Address */}
                 <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-inner">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div className="text-xs">
                     <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1 text-[10px]">Email Us</span>
-                    <a 
-                      href="mailto:info@mavoratechnologies.com" 
-                      className="text-sm font-bold text-blue-600 hover:text-blue-800 hover:underline block"
-                    >
+                    <a href="mailto:info@mavoratechnologies.com" className="text-sm font-bold text-blue-600 hover:text-blue-800 hover:underline block">
                       info@mavoratechnologies.com
                     </a>
                     <span className="text-slate-500 block mt-0.5">Primary channel for technical RFPs & briefs</span>
                   </div>
                 </div>
 
-                {/* Phone */}
                 <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-start gap-4 hover:border-blue-300 transition-all duration-300">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-inner">
                     <Phone className="h-5 w-5" />
                   </div>
                   <div className="text-xs">
                     <span className="font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1 text-[10px]">Phone / Call Desk</span>
-                    <a 
-                      href="tel:0799985842" 
-                      className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors block"
-                    >
-                      0799 985842
+                    <a href="tel:+254795707823" className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors block">
+                      +254 (0) 795 707 823
                     </a>
                     <span className="text-slate-500 block mt-0.5">Available Monday – Friday (8:30 AM – 5:00 PM EAT)</span>
                   </div>
                 </div>
+              </div>    
 
-              </div>
-
-              {/* SLA Banner */}
               <div className="p-6 rounded-2xl bg-slate-900 text-white space-y-4 shadow-xl border border-slate-800 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-[40px] pointer-events-none" />
                 <div className="flex items-center gap-2 text-teal-400 font-mono text-xs font-bold uppercase tracking-wider relative z-10">
@@ -188,8 +182,7 @@ export default function ContactPage() {
             </div>
 
             {/* Inquiry Form Column */}
-            <div className="lg:col-span-7">
-              
+            <div className="lg:col-span-7">   
               {status === 'success' ? (
                 <div className="p-10 rounded-3xl bg-white/90 backdrop-blur-md border border-slate-200/80 text-center space-y-6 shadow-sm">
                   <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center mx-auto shadow-inner">
@@ -212,13 +205,11 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur-md space-y-6 shadow-sm">
-                  
-                  <div>
+                  <div>   
                     <h3 className="text-xl font-bold text-slate-900">Send us a Message</h3>
                     <p className="text-xs text-slate-500 mt-1">Fill out the parameters below to route your inquiry to the correct engineering team.</p>
                   </div>
 
-                  {/* Name & Work Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -249,7 +240,6 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Company & Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -278,7 +268,6 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Inquiry Type */}
                   <div>
                     <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                       Inquiry Subject / Domain
@@ -296,7 +285,6 @@ export default function ContactPage() {
                     </select>
                   </div>
 
-                  {/* Message Input */}
                   <div>
                     <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                       Project Description or Message *
@@ -335,8 +323,7 @@ export default function ContactPage() {
                   </Button>
                 </form>
               )}
-
-            </div>
+            </div>    
 
           </div>
         </div>

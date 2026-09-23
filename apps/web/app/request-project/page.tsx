@@ -64,7 +64,8 @@ export default function RequestProjectPage() {
     setStatus('submitting');
 
     try {
-      const response = await fetch('/api/projects/request', {
+      // Points directly to your Express backend running on port 5000
+      const response = await fetch('http://localhost:5000/api/projects/request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -83,7 +84,7 @@ export default function RequestProjectPage() {
   return (
     <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden w-full flex flex-col">
       
-      {/* Hero Header - Reduced top padding & integrated Unsplash image */}
+      {/* Hero Header */}
       <section className="relative bg-[#EBF3FF] text-slate-900 pt-4 sm:pt-6 lg:pt-8 pb-8 lg:pb-12 overflow-hidden border-b border-slate-200/80 w-full">
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
@@ -105,7 +106,7 @@ export default function RequestProjectPage() {
               </p>
             </div>
 
-            {/* Right Tech Image (Unsplash) */}
+            {/* Right Tech Image */}
             <div className="lg:col-span-5 relative h-[240px] sm:h-[300px] lg:h-[340px] xl:h-[380px] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200/85">
               <Image
                 src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80"
@@ -121,7 +122,7 @@ export default function RequestProjectPage() {
         </div>
       </section>
 
-      {/* Main Form Section - Edge-to-Edge Fluid Layout */}
+      {/* Main Form Section */}
       <section className="py-6 sm:py-10 lg:py-14 relative bg-white/40 flex-grow w-full">
         <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-start">
@@ -186,7 +187,6 @@ export default function RequestProjectPage() {
                   {currentStep === 1 && (
                     <div className="space-y-6 sm:space-y-8">
                       
-                      {/* Technical Capabilities */}
                       <div>
                         <label className="block text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-2">
                           1. Select Required Technical Capabilities *
@@ -223,7 +223,6 @@ export default function RequestProjectPage() {
                         </div>
                       </div>
 
-                      {/* Execution Timeframe */}
                       <div>
                         <label className="block text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-2">
                           2. Target Execution Timeframe *
@@ -393,10 +392,9 @@ export default function RequestProjectPage() {
 
             </div>
 
-            {/* Side Process Panel & Secondary Unsplash Tech Card */}
+            {/* Side Process Panel */}
             <div className="lg:col-span-4 space-y-6">
               
-              {/* Secondary Tech Image (Unsplash) */}
               <div className="relative h-48 sm:h-56 w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80">
                 <Image
                   src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80"

@@ -262,7 +262,7 @@ export function Footer() {
               </li>
 
               <li className="text-slate-900 font-medium">
-                <a href="tel:0799985842">0799 985842</a>
+                <a href="tel:+254795707823">+254 (0) 795 707 823</a>
               </li>
             </ul>
           </div>

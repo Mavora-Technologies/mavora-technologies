@@ -4,7 +4,11 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 const SITE_URL = 'https://mavoratechnologies.com';
 
@@ -116,8 +120,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en">
-      <body className={`flex flex-col min-h-screen pt-20 ${inter.className}`}>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`flex flex-col min-h-screen pt-20 ${inter.variable} font-sans`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

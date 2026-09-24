@@ -1,6 +1,12 @@
-import { pgTable, uuid, text, timestamp, boolean, jsonb, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, timestamp, boolean, jsonb, pgEnum, index, } from 'drizzle-orm/pg-core';
 export const leadStatusEnum = pgEnum('lead_status', [
-    'NEW', 'CONTACTED', 'QUALIFIED', 'PROPOSAL', 'NEGOTIATION', 'WON', 'LOST'
+    'NEW',
+    'CONTACTED',
+    'QUALIFIED',
+    'PROPOSAL',
+    'NEGOTIATION',
+    'WON',
+    'LOST',
 ]);
 export const leads = pgTable('leads', {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -41,26 +47,31 @@ export const insights = pgTable('insights', {
     category: text('category').notNull(),
     coverImage: text('cover_image'),
     published: boolean('published').default(false).notNull(),
+    featured: boolean('featured').default(false).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+}, (table) => ({
+    publishedIdx: index('insights_published_idx').on(table.published),
+    slugIdx: index('insights_slug_idx').on(table.slug),
+    createdAtIdx: index('insights_created_at_idx').on(table.createdAt),
+}));
 export const projectRequests = pgTable('project_requests', {
     id: uuid('id').primaryKey().defaultRandom(),
     selectedServices: jsonb('selected_services').notNull(),
-    timeline: text('timeline'), // FIXED: Aligned with optional Zod schema
+    timeline: text('timeline'),
     projectOverview: text('project_overview').notNull(),
     fullName: text('full_name').notNull(),
     workEmail: text('work_email').notNull(),
     companyName: text('company_name'),
     phone: text('phone'),
-    requestNda: boolean('request_nda').default(false).notNull(), // FIXED: Aligned with Zod schema default
+    requestNda: boolean('request_nda').default(false).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 export const consultationRequests = pgTable('consultation_requests', {
     id: uuid('id').primaryKey().defaultRandom(),
-    consultationType: text('consultation_type'), // FIXED: Aligned with optional Zod schema
+    consultationType: text('consultation_type'),
     preferredDate: text('preferred_date').notNull(),
-    preferredTimeSlot: text('preferred_time_slot'), // FIXED: Aligned with optional Zod schema
+    preferredTimeSlot: text('preferred_time_slot'),
     fullName: text('full_name').notNull(),
     workEmail: text('work_email').notNull(),
     companyName: text('company_name'),

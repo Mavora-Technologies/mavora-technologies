@@ -1,35 +1,121 @@
-// 1. Safely strip any trailing slashes from the environment variable
-const rawApiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/+$/, '');
-
-// 2. Ensure /api is appended correctly
-const API_BASE_URL = rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`;
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  errors?: any;
+export interface Insight {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  category: string;
+  coverImage?: string | null;
+  published: boolean;
+  featured: boolean;
+  readTime: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+export interface Project {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  content: string;
+  client?: string | null;
+  category: string;
+  coverImage?: string | null;
+  metrics?: string | null;
+  featured: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: {
+    code: string;
+    message: string;
+  };
+}
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+// --- INSIGHTS API ---
+
+// Fetch all published insights from your database
+export async function getInsights(): Promise<Insight[]> {
   try {
-    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    
-    // 3. This will now reliably result in https://mavora-technologies.vercel.app/api/leads
-    const response = await fetch(`${API_BASE_URL}${cleanEndpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
+    const res = await fetch(`${API_BASE}/api/insights`, {
+      next: { revalidate: 60 },
     });
 
-    const result = await response.json();
-    return result;
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.message || 'Network error occurred',
-    };
+    if (!res.ok) {
+      return [];
+    }
+
+    const json: ApiResponse<Insight[]> = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error('Error in getInsights:', error);
+    return [];
+  }
+}
+
+// Fetch a single published insight by slug from your database
+export async function getInsightBySlug(slug: string): Promise<Insight | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/insights/${slug}`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const json: ApiResponse<Insight> = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error(`Error in getInsightBySlug [${slug}]:`, error);
+    return null;
+  }
+}
+
+// --- PROJECTS API ---
+
+// Fetch all projects from your database
+export async function getProjects(): Promise<Project[]> {
+  try {
+    const res = await fetch(`${API_BASE}/api/projects`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      return [];
+    }
+
+    const json: ApiResponse<Project[]> = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error('Error in getProjects:', error);
+    return [];
+  }
+}
+
+// Fetch a single project by slug from your database
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/projects/${slug}`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const json: ApiResponse<Project> = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error(`Error in getProjectBySlug [${slug}]:`, error);
+    return null;
   }
 }

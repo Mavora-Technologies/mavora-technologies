@@ -1,21 +1,14 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { INSIGHTS_DATA } from '@/lib/insights-data';
-import { Badge } from '@/components/ui/Badge';
+import { getInsights } from '@/lib/insights-queries';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Button } from '@/components/ui/Button';
 import { 
-  BookOpen, 
   Clock, 
-  User, 
   ArrowRight, 
   Sparkles, 
-  ShieldCheck, 
-  Code, 
-  Cloud,
-  Terminal,
-  Cpu
+  Terminal
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -23,15 +16,18 @@ export const metadata: Metadata = {
   description: 'Technical articles, architectural playbooks, and strategic analysis on AI automation, software engineering, cybersecurity, and cloud architecture.',
 };
 
-export default function InsightsPage() {
-  const articles = Object.values(INSIGHTS_DATA);
+// Ensure dynamic rendering so fresh database rows appear instantly
+export const dynamic = 'force-dynamic';
+
+export default async function InsightsPage() {
+  const articles = await getInsights();
   const featuredArticles = articles.filter((a) => a.featured);
   const regularArticles = articles.filter((a) => !a.featured);
 
   return (
     <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden">
       
-      {/* Hero Section - Reduced top spacing & Edge-to-Edge with Tech Unsplash Image */}
+      {/* Hero Section */}
       <section className="relative bg-[#EBF3FF] text-slate-900 py-10 sm:py-14 lg:py-20 overflow-hidden border-b border-slate-200/80">
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
@@ -52,12 +48,11 @@ export default function InsightsPage() {
               </p>
             </div>
 
-            {/* Hero Right-Side Tech Workspace Unsplash Image */}
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 shadow-2xl group">
                 <img 
                   src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80" 
-                  alt="Software engineering and technical architecture workspace" 
+                  alt="Software engineering workspace" 
                   className="w-full h-64 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
@@ -76,66 +71,6 @@ export default function InsightsPage() {
           </div>
         </div>
       </section>
-
-      {/* Featured Insights */}
-      {featuredArticles.length > 0 && (
-        <section className="py-12 lg:py-20 relative bg-white/40 border-b border-slate-200/80">
-          <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 relative z-10">
-            <div className="flex items-center gap-2 mb-8">
-              <Sparkles className="h-5 w-5 text-teal-600" />
-              <h2 className="text-xl font-bold text-slate-900">Featured Playbooks</h2>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {featuredArticles.map((article) => (
-                <div 
-                  key={article.slug}
-                  className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col justify-between border border-slate-800 shadow-xl group hover:border-teal-400/50 transition-all duration-300 relative overflow-hidden"
-                >
-                  {/* Subtle inner glow */}
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
-
-                  <div className="space-y-4 relative z-10">
-                    <div className="flex items-center justify-between text-xs text-slate-400">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-400/10 border border-teal-400/20 text-teal-300">
-                        {article.category}
-                      </span>
-                      <span className="flex items-center gap-1.5 font-mono text-slate-400">
-                        <Clock className="h-3.5 w-3.5 text-teal-400" />
-                        {article.readTime}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-teal-300 transition-colors leading-snug">
-                      <Link href={`/insights/${article.slug}`}>
-                        {article.title}
-                      </Link>
-                    </h3>
-
-                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                      {article.excerpt}
-                    </p>
-                  </div>
-
-                  <div className="pt-6 mt-8 border-t border-slate-800 flex items-center justify-between relative z-10">
-                    <div className="text-xs text-slate-400">
-                      <span className="text-slate-200 font-semibold block">{article.author.name}</span>
-                      <span>{article.publishedAt}</span>
-                    </div>
-
-                    <Link 
-                      href={`/insights/${article.slug}`}
-                      className="inline-flex items-center text-xs font-bold text-teal-400 hover:text-teal-300 transition-colors gap-1.5"
-                    >
-                      Read Article <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* All Insights Grid */}
       <section className="py-12 lg:py-20 relative bg-white/40">
@@ -186,7 +121,7 @@ export default function InsightsPage() {
         </div>
       </section>
 
-      {/* Newsletter / Stay Informed */}
+      {/* Newsletter Section */}
       <section className="py-14 lg:py-16 relative bg-[#EBF3FF] border-t border-slate-200/80">
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 text-center space-y-6 relative z-10 max-w-4xl mx-auto">
           <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 border border-teal-200 text-teal-800 shadow-sm backdrop-blur-md">

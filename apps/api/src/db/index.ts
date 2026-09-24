@@ -1,7 +1,7 @@
-import 'dotenv/config'; // <-- ADD THIS LINE AT THE VERY TOP
+import 'dotenv/config'; // Loads environment variables from .env file
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import * as schema from './schema.js';
+import * as schema from './schema.js'; // Added .js extension for Node16/NodeNext module resolution
 
 const connectionString = process.env.DATABASE_URL;
 

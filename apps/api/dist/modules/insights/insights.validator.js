@@ -1,16 +1,22 @@
 import { z } from 'zod';
 export const createInsightSchema = z.object({
-    body: z.object({
-        title: z.string().min(2, "Title is required"),
-        slug: z.string().min(2, "Slug is required"),
-        excerpt: z.string().min(5, "Excerpt is required"),
-        content: z.string().min(10, "Content is required"),
-        author: z.string().min(2, "Author name is required"),
-        category: z.string().min(2, "Category is required"),
-        coverImage: z.string().optional(),
-        published: z.boolean().optional(),
-    }),
+    title: z.string().min(3, 'Title must be at least 3 characters'),
+    slug: z
+        .string()
+        .min(3, 'Slug must be at least 3 characters')
+        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase, alphanumeric, and URL-safe (hyphen separated)'),
+    excerpt: z.string().min(10, 'Excerpt must be at least 10 characters'),
+    content: z.string().min(20, 'Content must be at least 20 characters'),
+    author: z.string().min(2, 'Author name is required'),
+    category: z.string().min(2, 'Category is required'),
+    coverImage: z.string().url('Cover image must be a valid URL').optional().nullable(),
+    published: z.boolean().optional().default(false),
+    featured: z.boolean().optional().default(false),
 });
-export const updateInsightSchema = z.object({
-    body: createInsightSchema.shape.body.partial(),
+export const updateInsightSchema = createInsightSchema.partial();
+export const insightSlugParamSchema = z.object({
+    slug: z
+        .string()
+        .min(1, 'Slug is required')
+        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Invalid slug format'),
 });

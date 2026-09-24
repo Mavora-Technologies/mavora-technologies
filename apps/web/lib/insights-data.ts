@@ -1,89 +1,85 @@
-export interface ArticleItem {
+export interface Author {
+  name: string;
+  role: string;
+}
+
+export interface Article {
   slug: string;
   title: string;
   excerpt: string;
-  category: 'AI & Automation' | 'Software Engineering' | 'Cybersecurity' | 'Cloud & Architecture';
+  content: string;
+  category: string;
   readTime: string;
   publishedAt: string;
-  author: {
-    name: string;
-    role: string;
-  };
+  author: Author;
   featured: boolean;
-  content: string[];
 }
 
-export const INSIGHTS_DATA: Record<string, ArticleItem> = {
-  'enterprise-ai-automation-playbook-2026': {
-    slug: 'enterprise-ai-automation-playbook-2026',
+export const INSIGHTS_DATA: Record<string, Article> = {
+  'architecting-enterprise-ai-automation': {
+    slug: 'architecting-enterprise-ai-automation',
     title: 'Architecting Enterprise AI Automation: Beyond Simple Chatbots',
-    excerpt: 'How modern businesses embed private LLM pipelines and autonomous workflow triggers into existing ERP and CRM core systems.',
+    excerpt: 'How modern businesses embed LLM pipelines and autonomous workflow triggers into existing ERP and CRM core systems.',
+    content: `
+      <p>Enterprise AI automation has evolved far beyond standard conversational chatbots. Modern organizations are deploying autonomous agentic workflows that integrate directly with core Enterprise Resource Planning (ERP) and Customer Relationship Management (CRM) platforms.</p>
+      <h2>The Shift to Agentic Workflows</h2>
+      <p>Traditional automation relied on rigid, deterministic IF-THEN rules. By incorporating Large Language Models (LLMs) with retrieval-augmented generation (RAG) and tool-calling capabilities, systems can now reason through unstructured inputs, parse invoices, reconcile discrepancies, and initiate transactions securely.</p>
+    `,
     category: 'AI & Automation',
     readTime: '6 min read',
     publishedAt: 'September 12, 2026',
     author: {
       name: 'Mavora Engineering Team',
-      role: 'AI Infrastructure Practice'
+      role: 'Principal AI Architects',
     },
     featured: true,
-    content: [
-      'Artificial intelligence in the enterprise has rapidly shifted from generic conversational wrappers to deeply integrated operational pipelines. Organizations that achieve measurable ROI aren’t just asking AI questions—they are wiring AI into their event buses.',
-      'By combining modern optical character recognition (OCR), private vector stores, and custom LLM reasoning endpoints, businesses automate previously human-dependent workflows like invoice reconciliation, contract verification, and automated customer routing.',
-      'Key architectural considerations include keeping customer data isolated using private VPC deployment models, maintaining immutable audit logs for every automated decision, and implementing human-in-the-loop review thresholds for high-risk operations.'
-    ]
   },
-  'zero-trust-architecture-for-modern-apis': {
-    slug: 'zero-trust-architecture-for-modern-apis',
+  'zero-trust-api-architecture': {
+    slug: 'zero-trust-api-architecture',
     title: 'Zero-Trust API Architecture: Securing Enterprise Monorepos',
     excerpt: 'Implementing strict Role-Based Access Control (RBAC), OAuth2 scope validations, and encrypted transit channels for modern web backends.',
+    content: `
+      <p>In distributed enterprise systems and monorepos, perimeter defense is no longer sufficient. Adopting a zero-trust model ensures that every service-to-service and client-to-service request is authenticated, authorized, and encrypted.</p>
+    `,
     category: 'Cybersecurity',
     readTime: '8 min read',
     publishedAt: 'August 28, 2026',
     author: {
       name: 'Security Engineering Team',
-      role: 'Cybersecurity Practice'
+      role: 'Cybersecurity Leads',
     },
     featured: true,
-    content: [
-      'Perimeter-based security is no longer sufficient for cloud-native web applications. Modern zero-trust principles require that every API request be authenticated, authorized, and validated regardless of whether it originates internally or externally.',
-      'By leveraging serverless edge routing, OAuth2 bearer token verification, and strict schema validation middleware, organizations reduce attack surfaces and satisfy stringent compliance frameworks like ISO 27001 and GDPR.',
-      'In this article, we break down how to implement granular permissions, short-lived JWTs, and real-time security logging across distributed micro-frontends and monorepos.'
-    ]
   },
-  'nextjs-turbopack-enterprise-scaling': {
-    slug: 'nextjs-turbopack-enterprise-scaling',
+  'scaling-nextjs-turbopack': {
+    slug: 'scaling-nextjs-turbopack',
     title: 'Scaling Next.js & Turbopack for High-Throughput Corporate Portals',
     excerpt: 'Lessons learned from deploying high-availability Next.js App Router applications with Neon PostgreSQL and edge caching.',
+    content: `
+      <p>Building high-throughput corporate portals requires optimizing build pipelines and database connection pooling. With Next.js 16 and Turbopack, local compilation speeds scale linearly even across massive enterprise monorepos.</p>
+    `,
     category: 'Software Engineering',
     readTime: '5 min read',
     publishedAt: 'August 14, 2026',
     author: {
-      name: 'Full-Stack Solutions Team',
-      role: 'Web Engineering Practice'
+      name: 'Mavora Web Team',
+      role: 'Senior Frontend Architects',
     },
     featured: false,
-    content: [
-      'Building performant enterprise portals requires balancing rapid server-side rendering (SSR) with dynamic user state. Next.js combined with Turbopack provides near-instantaneous build pipelines, but database pooling remains a frequent bottleneck.',
-      'By pairing serverless edge handlers with connection-pooled databases like Neon PostgreSQL and Drizzle ORM, applications achieve sub-100ms response times globally.',
-      'We review static rendering strategies, dynamic cache tag revalidation, and defensive UI error boundaries for high-reliability web platforms.'
-    ]
   },
-  'serverless-database-strategies-neon-drizzle': {
-    slug: 'serverless-database-strategies-neon-drizzle',
+  'modern-database-architecture': {
+    slug: 'modern-database-architecture',
     title: 'Modern Database Architecture: Serverless Postgres & Drizzle ORM',
     excerpt: 'Why enterprise developers are moving away from heavy ORMs and monolithic database instances toward serverless branching Postgres.',
+    content: `
+      <p>Traditional database provisioning introduces deployment bottlenecks and high idle costs. Serverless Postgres combined with lightweight, type-safe query builders like Drizzle ORM provides unprecedented developer velocity.</p>
+    `,
     category: 'Cloud & Architecture',
     readTime: '7 min read',
     publishedAt: 'July 30, 2026',
     author: {
-      name: 'Cloud & Data Practice',
-      role: 'Infrastructure Team'
+      name: 'Cloud Infrastructure Team',
+      role: 'Database Reliability Engineers',
     },
     featured: false,
-    content: [
-      'Traditional database instances demand constant capacity planning and failover management. Serverless PostgreSQL databases change this paradigm by decoupling compute from storage.',
-      'Database branching allows engineering teams to create isolated, copy-on-write environments for staging, automated PR testing, and schema migrations without touching production data.',
-      'When combined with lightweight ORMs like Drizzle, developers write type-safe SQL queries with zero runtime overhead and predictable execution speeds.'
-    ]
-  }
+  },
 };

@@ -1,11 +1,10 @@
+// apps/web/next.config.ts
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export',
   images: {
-    unoptimized: true, // Disables server-side image optimization
+    unoptimized: true, // Keep this if you want unoptimized images, or remove it if using Vercel Image Optimization
   },
-  // ... retain any other existing configuration settings
 };
 
 export default nextConfig;

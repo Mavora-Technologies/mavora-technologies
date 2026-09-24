@@ -1,70 +1,144 @@
 import { Request, Response, NextFunction } from 'express';
-import { eq } from 'drizzle-orm'; // <-- Ensure eq is imported from drizzle-orm
+import { eq, and, desc } from 'drizzle-orm';
 import { db } from '../../db/index.js';
 import { insights } from '../../db/schema.js';
 
-// GET /api/insights - Retrieve all insights or filter by category
+// Helper to compute reading time dynamically from content word count
+function calculateReadTime(content: string): string {
+  const wordsPerMinute = 200;
+  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+  return `${minutes} min read`;
+}
+
+// GET /api/insights - Public: Retrieve all published insights
 export const getInsights = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const category = req.query.category as string | undefined;
+    const { category } = req.query;
 
-    if (category && category !== 'all') {
-      const result = await db
-        .select()
-        .from(insights)
-        .where(eq(insights.category, category));
+    const baseCondition = eq(insights.published, true);
+    const filterCondition =
+      category && typeof category === 'string' && category !== 'all'
+        ? and(baseCondition, eq(insights.category, category))
+        : baseCondition;
 
-      return res.status(200).json({
-        success: true,
-        count: result.length,
-        data: result,
-      });
-    }
+    const records = await db
+      .select()
+      .from(insights)
+      .where(filterCondition)
+      .orderBy(desc(insights.createdAt));
 
-    const allInsights = await db.select().from(insights);
+    const formattedData = records.map((item) => ({
+      ...item,
+      readTime: calculateReadTime(item.content),
+    }));
 
     return res.status(200).json({
       success: true,
-      count: allInsights.length,
-      data: allInsights,
+      data: formattedData,
     });
   } catch (error) {
     console.error('❌ Error fetching insights:', error);
-    return next(error);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Something went wrong fetching insights',
+      },
+    });
   }
 };
 
-// GET /api/insights/:slug - Retrieve single insight by slug
+// GET /api/insights/:slug - Public: Retrieve single published insight by slug
 export const getInsightBySlug = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const slug = req.params.slug as string;
-
-    if (!slug) {
-      return res.status(400).json({
-        success: false,
-        message: 'Slug parameter is required',
-      });
-    }
+    const slugParam = req.params.slug as string;
 
     const [article] = await db
       .select()
       .from(insights)
-      .where(eq(insights.slug, slug))
+      .where(and(eq(insights.slug, slugParam), eq(insights.published, true)))
       .limit(1);
 
     if (!article) {
       return res.status(404).json({
         success: false,
-        message: 'Article not found',
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Insight not found',
+        },
       });
     }
 
     return res.status(200).json({
       success: true,
-      data: article,
+      data: {
+        ...article,
+        readTime: calculateReadTime(article.content),
+      },
     });
   } catch (error) {
     console.error('❌ Error fetching insight by slug:', error);
-    return next(error);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Something went wrong fetching article detail',
+      },
+    });
+  }
+};
+
+// POST /api/insights - Admin: Create a new insight
+export const createInsight = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const body = req.body;
+
+    const [existing] = await db
+      .select()
+      .from(insights)
+      .where(eq(insights.slug, body.slug))
+      .limit(1);
+
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'An article with this slug already exists',
+        },
+      });
+    }
+
+    const [newArticle] = await db
+      .insert(insights)
+      .values({
+        title: body.title,
+        slug: body.slug,
+        excerpt: body.excerpt,
+        content: body.content,
+        author: body.author,
+        category: body.category,
+        coverImage: body.coverImage ?? null,
+        published: body.published ?? false,
+      })
+      .returning();
+
+    return res.status(201).json({
+      success: true,
+      data: {
+        ...newArticle,
+        readTime: calculateReadTime(newArticle.content),
+      },
+    });
+  } catch (error) {
+    console.error('❌ Error creating insight:', error);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Something went wrong creating insight',
+      },
+    });
   }
 };

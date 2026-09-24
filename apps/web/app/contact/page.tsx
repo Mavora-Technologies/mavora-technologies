@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Badge } from '@/components/ui/Badge';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { fetchApi } from '@/lib/api'; // 1. Import our centralized API client
 import { 
   Mail, 
   Phone, 
@@ -12,9 +12,7 @@ import {
   Send, 
   CheckCircle2, 
   AlertCircle, 
-  MessageSquare,
-  Building2,
-  Sparkles
+  Building2 
 } from 'lucide-react';
 
 const INQUIRY_TYPES = [
@@ -25,6 +23,8 @@ const INQUIRY_TYPES = [
   'Cloud Infrastructure & DevOps',
   'Partnerships / Advisory',
 ];
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -42,7 +42,6 @@ export default function ContactPage() {
     e.preventDefault();
     setStatus('submitting');
 
-    // 2. Map frontend fields to match backend schema requirements
     const payload = {
       fullName: formData.fullName,
       email: formData.workEmail,
@@ -54,18 +53,23 @@ export default function ContactPage() {
     };
 
     try {
-      // 3. Send request directly to your Express backend /api/leads endpoint
-      const res = await fetchApi('/leads', {
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(payload),
       });
 
-      if (res.success) {
+      const json = await res.json();
+
+      if (res.ok && json.success) {
         setStatus('success');
       } else {
         setStatus('error');
       }
-    } catch {
+    } catch (err) {
+      console.error('Submission error:', err);
       setStatus('error');
     }
   };
@@ -94,11 +98,13 @@ export default function ContactPage() {
             </div>
       
             <div className="lg:col-span-5 relative">
-              <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 shadow-2xl group">
-                <img 
+              <div className="relative h-64 sm:h-80 w-full rounded-3xl overflow-hidden border border-slate-200/80 shadow-2xl group">
+                <Image 
                   src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80" 
                   alt="Mavora Technologies modern office workspace" 
-                  className="w-full h-64 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-700"
+                  fill
+                  priority
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
@@ -194,14 +200,12 @@ export default function ContactPage() {
                       Thank you for reaching out to Mavora Technologies. We have logged your request and sent a confirmation receipt to <strong className="text-slate-900">{formData.workEmail}</strong>.
                     </p>
                   </div>
-                  <Button 
+                  <Link 
                     href="/" 
-                    variant="ghost" 
-                    size="md"
-                    className="border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 shadow-sm rounded-xl px-6"
+                    className="inline-block border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 font-medium text-sm shadow-sm rounded-xl px-6 py-2.5 transition-colors"
                   >
                     Return to Home
-                  </Button>
+                  </Link>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur-md space-y-6 shadow-sm">

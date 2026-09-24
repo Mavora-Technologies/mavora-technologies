@@ -1,43 +1,25 @@
-'use client';
-
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
 import Image from 'next/image';
-import { PROJECTS_DATA, ProjectItem } from '@/lib/projects-data';
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
+import { getProjects } from '@/lib/projects-queries';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { Button } from '@/components/ui/Button';
 import { 
-  FolderGit2, 
   CheckCircle2, 
   ArrowRight, 
   Layers, 
-  Building2, 
-  ExternalLink 
+  Building2 
 } from 'lucide-react';
 
-const CATEGORIES = [
-  { key: 'all', label: 'All Projects' },
-  { key: 'ai-automation', label: 'AI & Automation' },
-  { key: 'software-development', label: 'Software Dev' },
-  { key: 'cybersecurity', label: 'Cybersecurity' },
-  { key: 'cloud-it', label: 'Cloud & IT' },
-  { key: 'mobile-development', label: 'Mobile Apps' },
-];
+export const revalidate = 60; // ISR cache revalidation every 60s
 
-export default function ProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState('all');
-
-  const filteredProjects = activeCategory === 'all'
-    ? PROJECTS_DATA
-    : PROJECTS_DATA.filter((p) => p.category === activeCategory);
+export default async function ProjectsPage() {
+  const projectsData = await getProjects();
 
   return (
     <div className="min-h-screen bg-[#EBF3FF] text-slate-900 overflow-x-hidden w-full">
       
       {/* Hero Section */}
       <section className="relative bg-[#EBF3FF] text-slate-900 pt-6 sm:pt-8 lg:pt-10 pb-16 lg:pb-24 overflow-hidden border-b border-slate-200/80 w-full">
-        {/* Background Grids & Ambient Lighting */}
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
         <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[120px] pointer-events-none" />
@@ -69,126 +51,110 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* Filter Tabs & Projects Grid */}
+      {/* Projects Grid Section */}
       <section className="py-20 relative bg-white/40 w-full">
         <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
           <SectionHeading
             badge="Case Studies"
             title="Featured Engineering Projects"
-            subtitle="Filter by technology capability to review architectural approaches, tech stacks, and quantifiable outcomes."
+            subtitle="Review architectural approaches, tech stacks, and quantifiable outcomes backed by your database."
             centered
           />
 
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-12 mt-8">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.key}
-                onClick={() => setActiveCategory(cat.key)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-300 border ${
-                  activeCategory === cat.key
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25'
-                    : 'bg-white/80 text-slate-600 border-slate-200/80 hover:bg-white hover:border-blue-300 hover:text-blue-700 shadow-sm backdrop-blur-sm'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Projects List */}
-          <div className="space-y-12">
-            {filteredProjects.map((project: ProjectItem) => (
-              <div 
-                key={project.id}
-                className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-8 lg:p-10 hover:border-blue-400 hover:shadow-xl transition-all duration-300 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-10 group"
-              >
-                {/* Main Info */}
-                <div className="lg:col-span-7 space-y-6">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 border border-blue-100 text-blue-700">
-                      {project.categoryLabel}
-                    </span>
-                    <span className="text-xs text-slate-500 font-mono font-semibold flex items-center gap-1.5 bg-slate-100/80 px-3 py-1 rounded-full border border-slate-200/50">
-                      <Building2 className="h-3.5 w-3.5 text-slate-600" />
-                      {project.clientIndustry}
-                    </span>
-                  </div>
-
-                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
-                    {project.title}
-                  </h2>
-
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {project.summary}
-                  </p>
-
-                  <div className="space-y-3 pt-2">
-                    <div className="p-4 rounded-xl bg-red-50/80 border border-red-100 text-sm shadow-sm">
-                      <span className="font-bold text-red-900 flex items-center gap-2 mb-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 block" />
-                        The Bottleneck
+          <div className="space-y-12 mt-12">
+            {projectsData.length === 0 ? (
+              <p className="text-center text-slate-500 py-12">No projects found in the database.</p>
+            ) : (
+              projectsData.map((project) => (
+                <div 
+                  key={project.id}
+                  className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-8 lg:p-10 hover:border-blue-400 hover:shadow-xl transition-all duration-300 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-10 group"
+                >
+                  {/* Main Info */}
+                  <div className="lg:col-span-7 space-y-6">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 border border-blue-100 text-blue-700">
+                        {project.client}
                       </span>
-                      <span className="text-slate-700 leading-relaxed text-xs">{project.challenge}</span>
+                      <span className="text-xs text-slate-500 font-mono font-semibold flex items-center gap-1.5 bg-slate-100/80 px-3 py-1 rounded-full border border-slate-200/50">
+                        <Building2 className="h-3.5 w-3.5 text-slate-600" />
+                        {project.industry}
+                      </span>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-teal-50/80 border border-teal-100 text-sm shadow-sm">
-                      <span className="font-bold text-teal-900 flex items-center gap-2 mb-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-teal-500 block" />
-                        Engineering Solution
-                      </span>
-                      <span className="text-slate-700 leading-relaxed text-xs">{project.solution}</span>
-                    </div>
-                  </div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                      {project.title}
+                    </h2>
 
-                  {/* Tech Stack Tags */}
-                  <div className="pt-4">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 block mb-3">Technology Stack</span>
-                    <div className="flex flex-wrap gap-2">
-                      {project.techStack.map((tech, idx) => (
-                        <span key={idx} className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 text-xs font-mono font-semibold text-slate-600 shadow-sm">
-                          {tech}
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      {project.description}
+                    </p>
+
+                    <div className="space-y-3 pt-2">
+                      <div className="p-4 rounded-xl bg-red-50/80 border border-red-100 text-sm shadow-sm">
+                        <span className="font-bold text-red-900 flex items-center gap-2 mb-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 block" />
+                          The Challenge
                         </span>
-                      ))}
+                        <span className="text-slate-700 leading-relaxed text-xs">{project.challenge}</span>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-teal-50/80 border border-teal-100 text-sm shadow-sm">
+                        <span className="font-bold text-teal-900 flex items-center gap-2 mb-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-teal-500 block" />
+                          Engineering Solution
+                        </span>
+                        <span className="text-slate-700 leading-relaxed text-xs">{project.solution}</span>
+                      </div>
+                    </div>
+
+                    {/* Tech Stack Tags from JSONB */}
+                    {project.technologies.length > 0 && (
+                      <div className="pt-4">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 block mb-3">Technology Stack</span>
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies.map((tech: string, idx: number) => (
+                            <span key={idx} className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 text-xs font-mono font-semibold text-slate-600 shadow-sm">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Results Box */}
+                  <div className="lg:col-span-5 bg-slate-900 text-white p-8 rounded-2xl shadow-xl border border-slate-800 flex flex-col justify-between space-y-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
+
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 text-teal-400 font-mono text-xs font-bold uppercase tracking-wider mb-6 border-b border-slate-800 pb-4">
+                        <Layers className="h-4 w-4" />
+                        <span>Measured Business Results</span>
+                      </div>
+
+                      <div className="space-y-4">
+                        <p className="text-sm font-medium text-slate-200 leading-relaxed">
+                          {project.results}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="pt-6 border-t border-slate-800 flex items-center justify-between relative z-10 mt-8">
+                      <span className="text-xs font-mono text-slate-400">Enterprise Build</span>
+                      <Button 
+                        href="/request-project" 
+                        variant="secondary" 
+                        size="sm" 
+                        className="text-xs bg-white/10 hover:bg-white/20 text-white border-0"
+                      >
+                        Build Similar <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                      </Button>
                     </div>
                   </div>
                 </div>
-
-                {/* Impact Metrics Box (Dark Strategic Card) */}
-                <div className="lg:col-span-5 bg-slate-900 text-white p-8 rounded-2xl shadow-xl border border-slate-800 flex flex-col justify-between space-y-6 relative overflow-hidden">
-                  {/* Subtle inner glow */}
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
-
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-2 text-teal-400 font-mono text-xs font-bold uppercase tracking-wider mb-6 border-b border-slate-800 pb-4">
-                      <Layers className="h-4 w-4" />
-                      <span>Measured Business Impact</span>
-                    </div>
-
-                    <ul className="space-y-5">
-                      {project.impactMetrics.map((metric, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <CheckCircle2 className="h-5 w-5 text-teal-400 shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(45,212,191,0.4)]" />
-                          <span className="text-sm font-medium text-slate-200 leading-relaxed">{metric}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="pt-6 border-t border-slate-800 flex items-center justify-between relative z-10 mt-8">
-                    <span className="text-xs font-mono text-slate-400">Enterprise Build</span>
-                    <Button 
-                      href="/request-project" 
-                      variant="secondary" 
-                      size="sm" 
-                      className="text-xs bg-white/10 hover:bg-white/20 text-white border-0"
-                    >
-                      Build Similar <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>

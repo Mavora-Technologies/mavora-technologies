@@ -1,48 +1,38 @@
-import { Request, Response } from 'express';
-import { db } from '../../db';
-import { leads } from '../../db/schema';
-import { sendLeadConfirmationEmail } from '../../utils/mailer';
+import { Request, Response, NextFunction } from 'express';
+import { db } from '../../db/index.js';
+import { leads } from '../../db/schema.js';
+import { sendLeadConfirmationEmail } from '../../services/email.js';
 
-export const createLead = async (req: Request, res: Response) => {
+export const createLead = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { fullName, email, company, phone, service, message, source } = req.body;
+    const body = req.body;
 
-    const payload = {
-      fullName,
-      email,
-      company: company || null,
-      phone: phone || null,
-      service,
-      message: message || null,
-      status: 'NEW' as const,
-      source: source || 'Website Contact Form',
-    };
+    const [newLead] = await db
+      .insert(leads)
+      .values({
+        fullName: body.fullName,
+        email: body.email,
+        company: body.company ?? null,
+        phone: body.phone ?? null,
+        service: body.service,
+        message: body.message,
+        status: 'NEW',
+        source: body.source ?? 'Website Contact Form',
+      })
+      .returning();
 
-    // 1. Save lead to Database
-    const [newLead] = await db.insert(leads).values(payload).returning();
+    // Trigger confirmation email asynchronously
+    sendLeadConfirmationEmail(body.email, body.fullName).catch((err) =>
+      console.error('Async email error:', err)
+    );
 
-    // 2. Dispatch email asynchronously (non-blocking)
-    try {
-      sendLeadConfirmationEmail({
-        to: newLead.email,
-        fullName: newLead.fullName,
-        service: newLead.service,
-      });
-    } catch (mailError) {
-      console.error('⚠️ Failed to send confirmation email:', mailError);
-    }
-
-    // 3. Respond immediately to frontend
     return res.status(201).json({
       success: true,
+      message: 'Lead recorded successfully',
       data: newLead,
-      message: 'Lead captured successfully',
     });
-  } catch (error: any) {
-    console.error('❌ Database insertion error:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: error.message || 'Failed to create lead' 
-    });
+  } catch (error) {
+    console.error('❌ Error creating lead:', error);
+    return next(error);
   }
 };

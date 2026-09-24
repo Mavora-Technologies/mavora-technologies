@@ -1,19 +1,17 @@
 import { Router } from 'express';
-import { 
-  getInsights, 
-  getInsightBySlug, 
-  createInsight, 
-  updateInsight, 
-  deleteInsight 
-} from './insights.controller';
-import { validate } from '../../middleware/validate';
-import { createInsightSchema, updateInsightSchema } from './insights.validator';
+import {
+  getInsights,
+  getInsightBySlug,
+} from './insights.controller.js';
+import { validate } from '../../middleware/validate.js';
+import { createInsightSchema, updateInsightSchema } from './insights.validator.js';
 
 const router = Router();
 
+// GET /api/insights
 router.get('/', getInsights);
+
+// GET /api/insights/:slug
 router.get('/:slug', getInsightBySlug);
-router.post('/', validate(createInsightSchema), createInsight);
-router.put('/:id', validate(updateInsightSchema), updateInsight);
-router.delete('/:id', deleteInsight);
+
 export default router;

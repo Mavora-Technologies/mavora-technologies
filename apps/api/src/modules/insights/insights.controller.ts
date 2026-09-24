@@ -1,98 +1,70 @@
-import { RequestHandler } from 'express';
-import { db } from '../../db';
-import { insights } from '../../db/schema';
-import { eq } from 'drizzle-orm';
+import { Request, Response, NextFunction } from 'express';
+import { eq } from 'drizzle-orm'; // <-- Ensure eq is imported from drizzle-orm
+import { db } from '../../db/index.js';
+import { insights } from '../../db/schema.js';
 
-export const getInsights: RequestHandler = async (req, res, next) => {
+// GET /api/insights - Retrieve all insights or filter by category
+export const getInsights = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const category = req.query.category as string | undefined;
+
+    if (category && category !== 'all') {
+      const result = await db
+        .select()
+        .from(insights)
+        .where(eq(insights.category, category));
+
+      return res.status(200).json({
+        success: true,
+        count: result.length,
+        data: result,
+      });
+    }
+
     const allInsights = await db.select().from(insights);
-    res.json({
+
+    return res.status(200).json({
       success: true,
+      count: allInsights.length,
       data: allInsights,
-      message: 'Insights retrieved successfully',
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to retrieve insights', error: error.message });
+  } catch (error) {
+    console.error('❌ Error fetching insights:', error);
+    return next(error);
   }
 };
 
-export const getInsightBySlug: RequestHandler<{ slug: string }> = async (req, res, next) => {
+// GET /api/insights/:slug - Retrieve single insight by slug
+export const getInsightBySlug = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { slug } = req.params;
-    const [insight] = await db.select().from(insights).where(eq(insights.slug, slug));
-    
-    if (!insight) {
-      res.status(404).json({ success: false, message: 'Insight article not found' });
-      return;
+    const slug = req.params.slug as string;
+
+    if (!slug) {
+      return res.status(400).json({
+        success: false,
+        message: 'Slug parameter is required',
+      });
     }
 
-    res.json({
-      success: true,
-      data: insight,
-      message: 'Insight retrieved successfully',
-    });
-  } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to retrieve insight', error: error.message });
-  }
-};
+    const [article] = await db
+      .select()
+      .from(insights)
+      .where(eq(insights.slug, slug))
+      .limit(1);
 
-export const createInsight: RequestHandler = async (req, res, next) => {
-  try {
-    const payload = req.body as typeof insights.$inferInsert;
-    const [newInsight] = await db.insert(insights).values(payload).returning();
-    
-    res.status(201).json({
-      success: true,
-      data: newInsight,
-      message: 'Insight created successfully',
-    });
-  } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to create insight', error: error.message });
-  }
-};
-
-export const updateInsight: RequestHandler<{ id: string }> = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const payload = req.body as Partial<typeof insights.$inferInsert>;
-    
-    const [updatedInsight] = await db
-      .update(insights)
-      .set({ ...payload, updatedAt: new Date() })
-      .where(eq(insights.id, id))
-      .returning();
-
-    if (!updatedInsight) {
-      res.status(404).json({ success: false, message: 'Insight article not found' });
-      return;
+    if (!article) {
+      return res.status(404).json({
+        success: false,
+        message: 'Article not found',
+      });
     }
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      data: updatedInsight,
-      message: 'Insight updated successfully',
+      data: article,
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to update insight', error: error.message });
-  }
-};
-
-export const deleteInsight: RequestHandler<{ id: string }> = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const [deletedInsight] = await db.delete(insights).where(eq(insights.id, id)).returning();
-
-    if (!deletedInsight) {
-      res.status(404).json({ success: false, message: 'Insight article not found' });
-      return;
-    }
-
-    res.json({
-      success: true,
-      data: deletedInsight,
-      message: 'Insight deleted successfully',
-    });
-  } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to delete insight', error: error.message });
+  } catch (error) {
+    console.error('❌ Error fetching insight by slug:', error);
+    return next(error);
   }
 };

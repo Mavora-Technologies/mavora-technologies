@@ -1,20 +1,17 @@
 import { Router } from 'express';
-import { 
-  getProjects, 
-  getProjectBySlug, 
-  createProject, 
-  updateProject, 
-  deleteProject 
-} from './projects.controller';
-import { validate } from '../../middleware/validate';
-import { createProjectSchema, updateProjectSchema } from './projects.validator';
+import {
+  getProjects,
+  getProjectBySlug,
+} from './projects.controller.js';
+import { validate } from '../../middleware/validate.js';
+import { createProjectSchema, updateProjectSchema } from './projects.validator.js';
 
 const router = Router();
 
+// GET /api/projects
 router.get('/', getProjects);
+
+// GET /api/projects/:slug
 router.get('/:slug', getProjectBySlug);
-router.post('/', validate(createProjectSchema), createProject);
-router.put('/:id', validate(updateProjectSchema), updateProject);
-router.delete('/:id', deleteProject);
 
 export default router;

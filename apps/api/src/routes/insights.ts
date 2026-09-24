@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { INSIGHTS_DATA, InsightItem } from '../data/mockData';
+import { Router, Request, Response, NextFunction } from 'express';
+import { INSIGHTS_DATA, InsightItem } from '../data/mockData.js';
 
 const router = Router();
 
 // GET /api/insights - Retrieve all articles/insights
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (req: Request, res: Response, next: NextFunction) => {
   try {
     const { category } = req.query;
 
@@ -22,16 +22,13 @@ router.get('/', (req: Request, res: Response) => {
       data: results,
     });
   } catch (error) {
-    console.error('Error fetching insights:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to retrieve insights',
-    });
+    console.error('❌ Error fetching insights:', error);
+    return next(error);
   }
 });
 
 // GET /api/insights/:slug - Retrieve single article by slug
-router.get('/:slug', (req: Request, res: Response) => {
+router.get('/:slug', (req: Request, res: Response, next: NextFunction) => {
   try {
     const { slug } = req.params;
     const article = INSIGHTS_DATA.find((item) => item.slug === slug);
@@ -48,11 +45,8 @@ router.get('/:slug', (req: Request, res: Response) => {
       data: article,
     });
   } catch (error) {
-    console.error('Error fetching article:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to retrieve article details',
-    });
+    console.error('❌ Error fetching article:', error);
+    return next(error);
   }
 });
 

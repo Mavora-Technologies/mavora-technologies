@@ -52,21 +52,21 @@ export const insights = pgTable('insights', {
 export const projectRequests = pgTable('project_requests', {
   id: uuid('id').primaryKey().defaultRandom(),
   selectedServices: jsonb('selected_services').notNull(),
-  timeline: text('timeline').notNull(),
+  timeline: text('timeline'), // FIXED: Aligned with optional Zod schema
   projectOverview: text('project_overview').notNull(),
   fullName: text('full_name').notNull(),
   workEmail: text('work_email').notNull(),
   companyName: text('company_name'),
   phone: text('phone'),
-  requestNda: boolean('request_nda').default(true).notNull(),
+  requestNda: boolean('request_nda').default(false).notNull(), // FIXED: Aligned with Zod schema default
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 export const consultationRequests = pgTable('consultation_requests', {
   id: uuid('id').primaryKey().defaultRandom(),
-  consultationType: text('consultation_type').notNull(),
+  consultationType: text('consultation_type'), // FIXED: Aligned with optional Zod schema
   preferredDate: text('preferred_date').notNull(),
-  preferredTimeSlot: text('preferred_time_slot').notNull(),
+  preferredTimeSlot: text('preferred_time_slot'), // FIXED: Aligned with optional Zod schema
   fullName: text('full_name').notNull(),
   workEmail: text('work_email').notNull(),
   companyName: text('company_name'),

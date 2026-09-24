@@ -1,45 +1,66 @@
-import { Router } from 'express';
-import { db } from '../db';
-import { projectRequests } from '../db/schema';
+import { Router, Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
+import { db } from '../db/index.js';
+import { projectRequests } from '../db/schema.js';
+import { sendProjectRequestConfirmationEmail } from '../services/email.js';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
-  try {
-    const { 
-      selectedServices, 
-      timeline, 
-      projectOverview, 
-      fullName, 
-      workEmail, 
-      companyName, 
-      phone, 
-      requestNda 
-    } = req.body;
+const projectRequestSchema = z.object({
+  selectedServices: z.array(z.string()).min(1, 'At least one service must be selected'),
+  timeline: z.string().optional().nullable(),
+  projectOverview: z.string().min(5, 'Project overview must be at least 5 characters'),
+  fullName: z.string().min(2, 'Full name is required'),
+  workEmail: z.string().email('Invalid email address'),
+  companyName: z.string().optional().nullable(),
+  phone: z.string().optional().nullable(),
+  requestNda: z.boolean().optional().default(false),
+});
 
-    // Basic validation
-    if (!fullName || !workEmail || !projectOverview || !selectedServices?.length) {
-      return res.status(400).json({ success: false, message: 'Missing required fields' });
+// POST /api/projects/request
+router.post('/request', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const parseResult = projectRequestSchema.safeParse(req.body);
+
+    if (!parseResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: parseResult.error.flatten().fieldErrors,
+      });
     }
 
-    const [newRequest] = await db.insert(projectRequests).values({
-      selectedServices,
-      timeline,
-      projectOverview,
-      fullName,
-      workEmail,
-      companyName,
-      phone,
-      requestNda,
-    }).returning();
+    const validatedData = parseResult.data;
 
-    return res.status(201).json({ success: true, data: newRequest });
-  } catch (error) {
-    console.error('Database Error saving project request:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Failed to submit project request due to a server error.' 
+    const insertPayload: typeof projectRequests.$inferInsert = {
+      selectedServices: validatedData.selectedServices,
+      timeline: validatedData.timeline ?? null,
+      projectOverview: validatedData.projectOverview,
+      fullName: validatedData.fullName,
+      workEmail: validatedData.workEmail,
+      companyName: validatedData.companyName ?? null,
+      phone: validatedData.phone ?? null,
+      requestNda: validatedData.requestNda,
+    };
+
+    const [newRequest] = await db
+      .insert(projectRequests)
+      .values(insertPayload)
+      .returning();
+
+    // Trigger confirmation email asynchronously
+    sendProjectRequestConfirmationEmail(validatedData.workEmail, validatedData.fullName).catch((err) =>
+      console.error('Async email error:', err)
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: 'Project request received successfully',
+      data: newRequest,
     });
+  } catch (error) {
+    console.error('❌ Error saving project request:', error);
+    return next(error);
   }
 });
 

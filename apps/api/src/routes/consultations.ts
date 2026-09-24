@@ -1,48 +1,79 @@
-import { Router } from 'express';
-import { db } from '../db';
-import { consultationRequests } from '../db/schema';
+import { Router, Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
+import { db } from '../db/index.js';
+import { consultationRequests } from '../db/schema.js';
+import { sendConsultationConfirmationEmail } from '../services/email.js';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
-  try {
-    const { 
-      consultationType, 
-      preferredDate, 
-      preferredTimeSlot, 
-      fullName, 
-      workEmail, 
-      companyName, 
-      phone,
-      discussionTopics 
-    } = req.body;
+const consultationRequestSchema = z.object({
+  fullName: z.string().min(2, 'Full name is required'),
+  workEmail: z.string().email('Invalid email address'),
+  companyName: z.string().optional().nullable(),
+  phone: z.string().optional().nullable(),
+  preferredDate: z.string().min(1, 'Preferred date is required'),
+  preferredTimeSlot: z.string().optional().nullable(),
+  consultationType: z.string().optional().nullable(),
+  discussionTopics: z.string().min(5, 'Discussion topics are required'),
+});
 
-    // Validate all fields that are marked as .notNull() in your Drizzle schema
-    if (!fullName || !workEmail || !consultationType || !preferredDate || !preferredTimeSlot || !discussionTopics) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Missing required consultation fields' 
+// POST /api/consultation/request
+router.post('/request', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const body = req.body || {};
+
+    const rawPayload = {
+      fullName: body.fullName || body.name || '',
+      workEmail: body.workEmail || body.email || '',
+      companyName: body.companyName || body.company || null,
+      phone: body.phone || null,
+      preferredDate: body.preferredDate || '',
+      preferredTimeSlot: body.preferredTimeSlot || body.timeSlot || null,
+      consultationType: body.consultationType || body.type || 'General Consultation',
+      discussionTopics: body.discussionTopics || body.topics || body.message || '',
+    };
+
+    const parseResult = consultationRequestSchema.safeParse(rawPayload);
+
+    if (!parseResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: parseResult.error.flatten().fieldErrors,
       });
     }
 
-    const [newConsultation] = await db.insert(consultationRequests).values({
-      consultationType,
-      preferredDate,
-      preferredTimeSlot,
-      fullName,
-      workEmail,
-      companyName: companyName || null,
-      phone: phone || null,
-      discussionTopics,
-    }).returning();
+    const data = parseResult.data;
 
-    return res.status(201).json({ success: true, data: newConsultation });
-  } catch (error) {
-    console.error('Database Error saving consultation request:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Failed to submit consultation request due to a server error.' 
+    const insertPayload: typeof consultationRequests.$inferInsert = {
+      fullName: data.fullName,
+      workEmail: data.workEmail,
+      companyName: data.companyName ?? null,
+      phone: data.phone ?? null,
+      preferredDate: data.preferredDate,
+      preferredTimeSlot: data.preferredTimeSlot ?? 'Flexible',
+      consultationType: data.consultationType ?? 'General Consultation',
+      discussionTopics: data.discussionTopics,
+    };
+
+    const [newRequest] = await db
+      .insert(consultationRequests)
+      .values(insertPayload)
+      .returning();
+
+    // Trigger confirmation email asynchronously
+    sendConsultationConfirmationEmail(data.workEmail, data.fullName, data.preferredDate).catch((err) =>
+      console.error('Async email error:', err)
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: 'Consultation request received successfully',
+      data: newRequest,
     });
+  } catch (error) {
+    console.error('❌ Error saving consultation request:', error);
+    return next(error);
   }
 });
 

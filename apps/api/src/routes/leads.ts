@@ -1,70 +1,73 @@
-import { Router, Request, Response } from 'express';
-import { db } from '../db';
-import { leads } from '../db/schema';
+import { Router, Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
+import { db } from '../db/index.js';
+import { leads } from '../db/schema.js';
+import { sendLeadConfirmationEmail } from '../services/email.js';
 
 const router = Router();
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-router.post('/', async (req: Request, res: Response) => {
-  console.log('📥 INCOMING LEAD PAYLOAD FROM FRONTEND:', req.body);
+const leadSchema = z.object({
+  fullName: z.string().min(2, 'Full name is required (min 2 characters).'),
+  email: z.string().email('A valid email address is required.'),
+  company: z.string().nullable(),
+  phone: z.string().nullable(),
+  service: z.string().min(1, 'Service type is required.'),
+  message: z.string().min(5, 'Message content is required (min 5 characters).'),
+  source: z.string().default('Website Contact Form'),
+});
 
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const body = req.body || {};
-    
-    const fullName = body.fullName || body.name;
-    const email = body.workEmail || body.email;
-    const company = body.companyName || body.company;
-    const phone = body.phone;
-    const service = body.service || body.inquiryType || body.inquirySubject || 'General Inquiry';
-    const message = body.projectOverview || body.message;
 
-    // Validation checks
-    if (!fullName || typeof fullName !== 'string' || fullName.trim() === '') {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Validation Error: Full name is required.' 
+    const rawPayload = {
+      fullName: (body.fullName || body.name || '').trim(),
+      email: (body.workEmail || body.email || '').trim().toLowerCase(),
+      company: (body.companyName || body.company || '').trim() || null,
+      phone: (body.phone || '').trim() || null,
+      service: (body.service || body.inquiryType || body.inquirySubject || 'General Inquiry').trim(),
+      message: (body.projectOverview || body.message || '').trim(),
+      source: body.source,
+    };
+
+    const parseResult = leadSchema.safeParse(rawPayload);
+
+    if (!parseResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation Error',
+        errors: parseResult.error.flatten().fieldErrors,
       });
     }
 
-    if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Validation Error: A valid email address is required.' 
-      });
-    }
+    const validatedData = parseResult.data;
 
-    if (!message || typeof message !== 'string' || message.trim() === '') {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Validation Error: Message content is required.' 
-      });
-    }
-
-    // Insert using Drizzle ORM matching your exact leads table schema columns
-    const [newLead] = await db.insert(leads).values({
-      fullName: fullName.trim(),
-      email: email.trim().toLowerCase(),
-      company: company ? company.trim() : null,
-      phone: phone ? phone.trim() : null,
-      service: service ? service.trim() : 'General Inquiry',
-      message: message.trim(),
+    const insertPayload: typeof leads.$inferInsert = {
+      fullName: validatedData.fullName,
+      email: validatedData.email,
+      company: validatedData.company,
+      phone: validatedData.phone,
+      service: validatedData.service,
+      message: validatedData.message,
       status: 'NEW',
-      source: body.source || 'Website Contact Form',
-    }).returning();
+      source: validatedData.source,
+    };
+
+    const [newLead] = await db.insert(leads).values(insertPayload).returning();
+
+    // Trigger confirmation email
+    sendLeadConfirmationEmail(validatedData.email, validatedData.fullName).catch((err) =>
+      console.error('Async email error:', err)
+    );
 
     return res.status(201).json({
       success: true,
       message: 'Thank you for reaching out! Your message has been received.',
       data: newLead,
     });
-
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Database Error saving lead via Drizzle:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to submit message due to a server error.',
-      errorDetail: error?.message || String(error),
-    });
+    return next(error);
   }
 });
 

@@ -1,0 +1,70 @@
+import { pgTable, uuid, text, timestamp, boolean, jsonb, pgEnum } from 'drizzle-orm/pg-core';
+export const leadStatusEnum = pgEnum('lead_status', [
+    'NEW', 'CONTACTED', 'QUALIFIED', 'PROPOSAL', 'NEGOTIATION', 'WON', 'LOST'
+]);
+export const leads = pgTable('leads', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    fullName: text('full_name').notNull(),
+    company: text('company'),
+    email: text('email').notNull(),
+    phone: text('phone'),
+    service: text('service').notNull(),
+    message: text('message'),
+    status: leadStatusEnum('status').default('NEW').notNull(),
+    source: text('source').default('Website').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+export const projects = pgTable('projects', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    title: text('title').notNull(),
+    slug: text('slug').notNull().unique(),
+    client: text('client').notNull(),
+    industry: text('industry').notNull(),
+    description: text('description').notNull(),
+    challenge: text('challenge').notNull(),
+    solution: text('solution').notNull(),
+    results: text('results').notNull(),
+    featured: boolean('featured').default(false).notNull(),
+    coverImage: text('cover_image'),
+    technologies: jsonb('technologies').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+export const insights = pgTable('insights', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    title: text('title').notNull(),
+    slug: text('slug').notNull().unique(),
+    excerpt: text('excerpt').notNull(),
+    content: text('content').notNull(), // Markdown or HTML content
+    author: text('author').notNull(),
+    category: text('category').notNull(),
+    coverImage: text('cover_image'),
+    published: boolean('published').default(false).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+export const projectRequests = pgTable('project_requests', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    selectedServices: jsonb('selected_services').notNull(),
+    timeline: text('timeline'), // FIXED: Aligned with optional Zod schema
+    projectOverview: text('project_overview').notNull(),
+    fullName: text('full_name').notNull(),
+    workEmail: text('work_email').notNull(),
+    companyName: text('company_name'),
+    phone: text('phone'),
+    requestNda: boolean('request_nda').default(false).notNull(), // FIXED: Aligned with Zod schema default
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+export const consultationRequests = pgTable('consultation_requests', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    consultationType: text('consultation_type'), // FIXED: Aligned with optional Zod schema
+    preferredDate: text('preferred_date').notNull(),
+    preferredTimeSlot: text('preferred_time_slot'), // FIXED: Aligned with optional Zod schema
+    fullName: text('full_name').notNull(),
+    workEmail: text('work_email').notNull(),
+    companyName: text('company_name'),
+    phone: text('phone'),
+    discussionTopics: text('discussion_topics').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});

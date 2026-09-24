@@ -16,7 +16,6 @@ export const metadata: Metadata = {
   description: 'Technical articles, architectural playbooks, and strategic analysis on AI automation, software engineering, cybersecurity, and cloud architecture.',
 };
 
-// Ensure dynamic rendering so fresh database rows appear instantly
 export const dynamic = 'force-dynamic';
 
 export default async function InsightsPage() {

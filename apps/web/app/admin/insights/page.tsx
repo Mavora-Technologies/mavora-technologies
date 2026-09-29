@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
+// Sanitize URL to remove any trailing slashes automatically
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = rawApiUrl.replace(/\/$/, '');
+
 export default function AdminInsightsPage() {
   const [user, setUser] = useState<any>(null);
   const [insights, setInsights] = useState<any[]>([]);
@@ -42,8 +46,9 @@ export default function AdminInsightsPage() {
   }, []);
 
   const fetchInsights = async (token: string) => {
+    const targetUrl = `${API_BASE_URL}/api/insights`;
     try {
-      const response = await fetch('http://localhost:5000/api/insights', {
+      const response = await fetch(targetUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -51,10 +56,11 @@ export default function AdminInsightsPage() {
         const data = await response.json();
         setInsights(data.data || []);
       } else {
-        console.error('Failed to fetch insights:', response.statusText);
+        // Logs the exact target URL to make debugging immediate
+        console.error(`Failed to fetch insights from ${targetUrl}: ${response.status} ${response.statusText}`);
       }
     } catch (error) {
-      console.error('Error fetching insights:', error);
+      console.error(`Error fetching insights from ${targetUrl}:`, error);
     } finally {
       setLoading(false);
     }
@@ -64,9 +70,10 @@ export default function AdminInsightsPage() {
     e.preventDefault();
     setSubmitting(true);
     const token = localStorage.getItem('mavora_admin_token');
+    const targetUrl = `${API_BASE_URL}/api/insights`;
 
     try {
-      const response = await fetch('http://localhost:5000/api/insights', {
+      const response = await fetch(targetUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +100,7 @@ export default function AdminInsightsPage() {
         alert(err.message || 'Failed to create insight.');
       }
     } catch (error) {
-      console.error('Error creating insight:', error);
+      console.error(`Error creating insight at ${targetUrl}:`, error);
     } finally {
       setSubmitting(false);
     }

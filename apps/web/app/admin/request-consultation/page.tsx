@@ -1,3 +1,4 @@
+// apps/web/app/admin/consultations/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ export default function AdminConsultationRequestsPage() {
   const [user, setUser] = useState<any>(null);
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -58,7 +60,12 @@ export default function AdminConsultationRequestsPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`[${response.status} ${response.statusText}] Failed to fetch from ${targetUrl}`);
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('mavora_admin_token');
+          router.push('/admin/login');
+          return;
+        }
+        throw new Error(`[Status ${response.status} ${response.statusText}] Failed to fetch from ${targetUrl}`);
       }
 
       const resData = await response.json();
@@ -77,6 +84,7 @@ export default function AdminConsultationRequestsPage() {
     const token = localStorage.getItem('mavora_admin_token');
     if (!token) return;
 
+    setActionLoading(id);
     const targetUrl = getApiUrl(`/api/consultations/${id}/status`);
 
     try {
@@ -98,6 +106,8 @@ export default function AdminConsultationRequestsPage() {
       }
     } catch (error) {
       console.error('Error updating status:', error);
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -106,6 +116,7 @@ export default function AdminConsultationRequestsPage() {
     const token = localStorage.getItem('mavora_admin_token');
     if (!token) return;
 
+    setActionLoading(id);
     const targetUrl = getApiUrl(`/api/consultations/${id}`);
 
     try {
@@ -121,7 +132,47 @@ export default function AdminConsultationRequestsPage() {
       }
     } catch (error) {
       console.error('Error deleting consultation:', error);
+    } finally {
+      setActionLoading(null);
     }
+  };
+
+  const exportToCSV = () => {
+    if (requests.length === 0) {
+      alert('No consultation requests available to export.');
+      return;
+    }
+
+    const headers = ['ID', 'Full Name', 'Company', 'Email', 'Phone', 'Topic / Message', 'Status', 'Requested Date'];
+    const rows = requests.map((r) => {
+      const clientName = r.fullName || r.full_name || r.name || '';
+      const company = r.companyName || r.company_name || r.company || '';
+      const email = r.workEmail || r.work_email || r.email || '';
+      const phone = r.phone || '';
+      const topic = r.discussionTopics || r.discussion_topics || r.topic || r.message || '';
+      const status = r.status || r.consultationType || r.consultation_type || 'PENDING';
+      const createdDate = r.createdAt || r.created_at || '';
+
+      return [
+        r.id,
+        `"${clientName}"`,
+        `"${company}"`,
+        `"${email}"`,
+        `"${phone}"`,
+        `"${topic.replace(/"/g, '""')}"`,
+        status,
+        createdDate,
+      ];
+    });
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `mavora_consultations_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getStatusColor = (status: string) => {
@@ -141,25 +192,45 @@ export default function AdminConsultationRequestsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Page Action Header */}
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-white">Consultation Requests</h2>
           <p className="text-xs text-slate-400 mt-0.5">Manage scheduled and requested client consultations</p>
         </div>
-        <button 
-          onClick={() => fetchConsultationRequests(localStorage.getItem('mavora_admin_token') || '')}
-          className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors"
-        >
-          Refresh Data
-        </button>
+        <div className="flex items-center space-x-3">
+          <button 
+            onClick={() => fetchConsultationRequests(localStorage.getItem('mavora_admin_token') || '')}
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg transition-colors"
+          >
+            Refresh Data
+          </button>
+          <button
+            onClick={exportToCSV}
+            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            Export to CSV
+          </button>
+        </div>
       </div>
 
+      {/* API Error Banner */}
       {apiError && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
-          <strong>API Request Error:</strong> {apiError}
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex items-center justify-between">
+          <span><strong>API Request Error:</strong> {apiError}</span>
+          <button 
+            onClick={() => {
+              const token = localStorage.getItem('mavora_admin_token');
+              if (token) fetchConsultationRequests(token);
+            }} 
+            className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded text-xs font-semibold"
+          >
+            Retry Fetch
+          </button>
         </div>
       )}
 
+      {/* Consultation Requests Table */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-300">
@@ -176,7 +247,7 @@ export default function AdminConsultationRequestsPage() {
             <tbody>
               {requests.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                     {apiError ? 'Unable to load records due to API error.' : 'No consultation requests found in the database.'}
                   </td>
                 </tr>
@@ -200,14 +271,17 @@ export default function AdminConsultationRequestsPage() {
                         <div>{email}</div>
                         {phone && <div className="text-xs text-slate-500 mt-1">{phone}</div>}
                       </td>
-                      <td className="px-6 py-4 text-slate-300 max-w-xs truncate">
+                      <td className="px-6 py-4 text-slate-300 max-w-xs truncate" title={topic}>
                         {topic}
                       </td>
                       <td className="px-6 py-4">
                         <select
                           value={currentStatus}
                           onChange={(e) => handleUpdateStatus(item.id, e.target.value)}
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold border bg-slate-900 text-white cursor-pointer focus:outline-none ${getStatusColor(currentStatus)}`}
+                          disabled={actionLoading === item.id}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-semibold border bg-slate-950 cursor-pointer ${getStatusColor(
+                            currentStatus
+                          )}`}
                         >
                           <option value="PENDING" className="bg-slate-900 text-yellow-400">PENDING</option>
                           <option value="CONFIRMED" className="bg-slate-900 text-blue-400">CONFIRMED</option>
@@ -216,12 +290,13 @@ export default function AdminConsultationRequestsPage() {
                         </select>
                       </td>
                       <td className="px-6 py-4 text-slate-400 text-xs">
-                        {createdDate ? new Date(createdDate).toLocaleDateString() : '—'}
+                        {createdDate ? `${new Date(createdDate).toLocaleDateString()} ${new Date(createdDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '—'}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleDeleteRequest(item.id)}
-                          className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
+                          disabled={actionLoading === item.id}
+                          className="text-red-400 hover:text-red-300 text-xs font-medium px-2.5 py-1.5 bg-red-950/30 hover:bg-red-900/40 border border-red-900/40 rounded-lg transition-colors disabled:opacity-50"
                         >
                           Delete
                         </button>

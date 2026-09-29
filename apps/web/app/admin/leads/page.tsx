@@ -4,6 +4,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Sanitize URL to remove any trailing slashes automatically
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = rawApiUrl.replace(/\/$/, '');
+
 export default function AdminLeadsPage() {
   const [user, setUser] = useState<any>(null);
   const [leads, setLeads] = useState<any[]>([]);
@@ -31,8 +35,9 @@ export default function AdminLeadsPage() {
 
   const fetchLeads = async (token?: string) => {
     const authToken = token || localStorage.getItem('mavora_admin_token');
+    const targetUrl = `${API_BASE_URL}/api/leads`;
     try {
-      const response = await fetch('http://localhost:5000/api/leads', {
+      const response = await fetch(targetUrl, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 
@@ -46,7 +51,7 @@ export default function AdminLeadsPage() {
       if (response.ok) {
         setLeads(data.data || []);
       } else {
-        console.error(`❌ API Error [Status ${response.status}]:`, data);
+        console.error(`❌ API Error [Status ${response.status}] from ${targetUrl}:`, data);
         if (response.status === 401 || response.status === 403) {
           alert('Admin session expired or unauthorized. Please log in again.');
           localStorage.removeItem('mavora_admin_token');
@@ -56,7 +61,7 @@ export default function AdminLeadsPage() {
         }
       }
     } catch (error) {
-      console.error('Network or connection error:', error);
+      console.error(`Network or connection error fetching from ${targetUrl}:`, error);
     } finally {
       setLoading(false);
     }
@@ -65,8 +70,9 @@ export default function AdminLeadsPage() {
   const handleStatusChange = async (id: string, newStatus: string) => {
     const token = localStorage.getItem('mavora_admin_token');
     setActionLoading(id);
+    const targetUrl = `${API_BASE_URL}/api/leads/${id}/status`;
     try {
-      const response = await fetch(`http://localhost:5000/api/leads/${id}/status`, {
+      const response = await fetch(targetUrl, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +89,7 @@ export default function AdminLeadsPage() {
         alert('Failed to update lead status.');
       }
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error(`Error updating status at ${targetUrl}:`, error);
     } finally {
       setActionLoading(null);
     }
@@ -93,8 +99,9 @@ export default function AdminLeadsPage() {
     if (!confirm('Are you sure you want to delete this lead?')) return;
 
     const token = localStorage.getItem('mavora_admin_token');
+    const targetUrl = `${API_BASE_URL}/api/leads/${id}`;
     try {
-      const response = await fetch(`http://localhost:5000/api/leads/${id}`, {
+      const response = await fetch(targetUrl, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -105,7 +112,7 @@ export default function AdminLeadsPage() {
         alert('Failed to delete lead.');
       }
     } catch (error) {
-      console.error('Error deleting lead:', error);
+      console.error(`Error deleting lead at ${targetUrl}:`, error);
     }
   };
 

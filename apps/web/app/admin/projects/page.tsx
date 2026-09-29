@@ -4,7 +4,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Sanitize URL to remove any trailing slashes automatically
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = rawApiUrl.replace(/\/$/, '');
 
 export default function AdminProjectsPage() {
   const [user, setUser] = useState<any>(null);
@@ -56,8 +58,9 @@ export default function AdminProjectsPage() {
 
   const fetchProjects = async (token: string) => {
     setErrorMsg(null);
+    const targetUrl = `${API_BASE_URL}/api/projects`;
     try {
-      const response = await fetch(`${API_BASE_URL}/projects`, {
+      const response = await fetch(targetUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -70,7 +73,7 @@ export default function AdminProjectsPage() {
         setErrorMsg(err.message || `API returned status ${response.status}`);
       }
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error(`Error fetching projects from ${targetUrl}:`, error);
       setErrorMsg('Failed to connect to the backend server. Verify the backend API is running.');
     } finally {
       setLoading(false);
@@ -89,8 +92,9 @@ export default function AdminProjectsPage() {
         : [],
     };
 
+    const targetUrl = `${API_BASE_URL}/api/projects`;
     try {
-      const response = await fetch(`${API_BASE_URL}/projects`, {
+      const response = await fetch(targetUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +124,7 @@ export default function AdminProjectsPage() {
         alert(err.message || 'Failed to create project.');
       }
     } catch (error) {
-      console.error('Error creating project:', error);
+      console.error(`Error creating project at ${targetUrl}:`, error);
       alert('Network error while creating project.');
     } finally {
       setSubmitting(false);

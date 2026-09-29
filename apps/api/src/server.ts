@@ -1,9 +1,9 @@
-// apps/api/src/server.ts
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import projectsRouter from './routes/projects';
 import insightsRouter from './routes/insights';
 import leadsRouter from './routes/leads';
-import consultationsRouter from './routes/consultations'; // <--- Added consultations router
+import consultationsRouter from './routes/consultations';
 import authRouter from './modules/auth/auth.routes';
 import usersRouter from './modules/users/users.routes';
 import notificationsRouter from './modules/notifications/notifications.routes';
@@ -14,49 +14,54 @@ import 'dotenv/config';
 
 const app = express();
 
-// 1. Raw CORS Middleware (Runs BEFORE any database connection or routing)
-app.use((req: Request, res: Response, next: NextFunction) => {
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'https://mavoratechnologies.com',
-    'https://www.mavoratechnologies.com',
-    'https://mavora-technologies.pages.dev',
-  ];
+// Allowed Origins List
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://mavoratechnologies.com',
+  'https://www.mavoratechnologies.com',
+  'https://mavora-technologies.pages.dev',
+];
 
-  if (origin && (allowedOrigins.includes(origin) || origin.endsWith('.mavora-technologies.pages.dev'))) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', 'https://mavoratechnologies.com');
-  }
+// Configure standard CORS middleware
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+      if (!origin) return callback(null, true);
 
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.mavora-technologies.pages.dev')
+      ) {
+        return callback(null, true);
+      } else {
+        return callback(null, true); // Or callback(new Error('Not allowed by CORS'))
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  })
+);
 
-  // Immediately fulfill browser preflight checks
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  next();
-});
+// Explicitly handle preflight OPTIONS requests globally
+app.options('*', cors() as any);
 
 app.use(express.json());
 
-// 2. Health Check
+// Health Check
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', message: 'Mavora API is running' });
 });
 
-// 3. API Routes
+// API Routes
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/projects', projectsRouter);
 app.use('/api/insights', insightsRouter);
 app.use('/api/leads', leadsRouter);
-app.use('/api/consultations', consultationsRouter); // <--- Admin portal & API route for consultations
-app.use('/api/consultation', consultationsRouter);  // <--- Frontend client booking endpoint support
+app.use('/api/consultations', consultationsRouter);
+app.use('/api/consultation', consultationsRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/audit-logs', auditLogsRouter);
 
@@ -96,12 +101,12 @@ app.post('/api/projects/request', async (req: Request, res: Response) => {
   }
 });
 
-// 4. 404 Handler
+// 404 Handler
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, message: 'API route not found' });
 });
 
-// 5. Global Error Handler
+// Global Error Handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Unhandled API Error:', err);
   res.status(500).json({ success: false, message: err.message || 'Internal server error' });

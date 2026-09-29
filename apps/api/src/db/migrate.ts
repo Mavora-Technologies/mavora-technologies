@@ -3,10 +3,8 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// __filename and __dirname are automatically available in CommonJS
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 dotenv.config();
 
@@ -22,7 +20,7 @@ const runMigration = async () => {
   const pool = new Pool({
     connectionString,
     ssl: { rejectUnauthorized: false },
-    connectionTimeoutMillis: 4000, // Fails fast instead of hanging
+    connectionTimeoutMillis: 4000,
   });
 
   try {
@@ -33,7 +31,6 @@ const runMigration = async () => {
   } catch (err: any) {
     console.warn('⚠️ [Migration Warning]: Could not reach the database server.');
     console.warn(`   Details: ${err.message}`);
-    console.warn('💡 Your code is safe, but make sure your Neon database URL is correct when you are ready to connect.');
   } finally {
     await pool.end();
   }

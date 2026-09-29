@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const insights_controller_1 = require("./insights.controller");
+const validate_1 = require("../../middleware/validate");
+const insights_validator_1 = require("./insights.validator");
+const router = (0, express_1.Router)();
+router.get('/', insights_controller_1.getInsights);
+router.get('/:slug', insights_controller_1.getInsightBySlug);
+router.post('/', (0, validate_1.validate)(insights_validator_1.createInsightSchema), insights_controller_1.createInsight);
+router.put('/:id', (0, validate_1.validate)(insights_validator_1.updateInsightSchema), insights_controller_1.updateInsight);
+router.delete('/:id', insights_controller_1.deleteInsight);
+exports.default = router;

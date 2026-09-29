@@ -1,8 +1,8 @@
+// apps/web/app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
+import { SiteLayout } from '@/components/layout/SiteLayout'; // <-- Import the new wrapper
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -121,14 +121,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={`flex flex-col min-h-screen pt-20 ${inter.variable} font-sans`}>
+      {/* Removed pt-20 from body, it is now handled inside SiteLayout */}
+      <body className={`flex flex-col min-h-screen ${inter.variable} font-sans`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <SiteLayout>
+          {children}
+        </SiteLayout>
       </body>
     </html>
   );

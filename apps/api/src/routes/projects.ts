@@ -1,10 +1,23 @@
-import { Router } from 'express';
+// apps/api/src/routes/projects.ts
+import { Router, Request, Response } from 'express';
 import { db } from '../db';
-import { projectRequests } from '../db/schema';
+import { projects, projectRequests } from '../db/schema';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
+// GET /api/projects
+router.get('/', async (_req: Request, res: Response) => {
+  try {
+    const allProjects = await db.select().from(projects);
+    return res.json({ success: true, data: allProjects });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+// POST /api/projects/request
+router.post('/request', async (req: Request, res: Response) => {
   try {
     const { 
       selectedServices, 
@@ -17,7 +30,6 @@ router.post('/', async (req, res) => {
       requestNda 
     } = req.body;
 
-    // Basic validation
     if (!fullName || !workEmail || !projectOverview || !selectedServices?.length) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
@@ -35,11 +47,8 @@ router.post('/', async (req, res) => {
 
     return res.status(201).json({ success: true, data: newRequest });
   } catch (error) {
-    console.error('Database Error saving project request:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Failed to submit project request due to a server error.' 
-    });
+    console.error('Error saving project request:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 

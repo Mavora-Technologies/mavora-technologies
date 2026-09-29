@@ -1,10 +1,28 @@
+// apps/api/src/routes/leads.ts
 import { Router, Request, Response } from 'express';
 import { db } from '../db';
 import { leads } from '../db/schema';
+import { eq } from 'drizzle-orm';
 
 const router = Router();
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// 1. GET /api/leads - Fetch all leads for the Admin Portal
+router.get('/', async (_req: Request, res: Response) => {
+  try {
+    const allLeads = await db.select().from(leads);
+    return res.status(200).json({ success: true, data: allLeads });
+  } catch (error: any) {
+    console.error('❌ Error fetching leads from database:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal server error while fetching leads.',
+      errorDetail: error?.message || String(error),
+    });
+  }
+});
+
+// 2. POST /api/leads - Submit a new lead / contact message
 router.post('/', async (req: Request, res: Response) => {
   console.log('📥 INCOMING LEAD PAYLOAD FROM FRONTEND:', req.body);
 
@@ -45,7 +63,7 @@ router.post('/', async (req: Request, res: Response) => {
       fullName: fullName.trim(),
       email: email.trim().toLowerCase(),
       company: company ? company.trim() : null,
-      phone: phone ? phone.trim() : null,
+      phone: phone ? String(phone).trim() : null,
       service: service ? service.trim() : 'General Inquiry',
       message: message.trim(),
       status: 'NEW',
@@ -63,6 +81,73 @@ router.post('/', async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to submit message due to a server error.',
+      errorDetail: error?.message || String(error),
+    });
+  }
+});
+
+// 3. PATCH /api/leads/:id/status - Update lead status (e.g. NEW -> CONTACTED -> CLOSED)
+router.patch('/:id/status', async (req: Request, res: Response) => {
+  try {
+    const leadId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const { status } = req.body;
+
+    if (!leadId) {
+      return res.status(400).json({ success: false, message: 'Lead ID is required.' });
+    }
+
+    if (!status) {
+      return res.status(400).json({ success: false, message: 'Status is required.' });
+    }
+
+    const [updatedLead] = await db
+      .update(leads)
+      .set({ 
+        status: status.trim(), 
+        updatedAt: new Date() 
+      })
+      .where(eq(leads.id, leadId))
+      .returning();
+
+    if (!updatedLead) {
+      return res.status(404).json({ success: false, message: 'Lead not found.' });
+    }
+
+    return res.status(200).json({ success: true, data: updatedLead });
+  } catch (error: any) {
+    console.error('❌ Error updating lead status:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal server error while updating lead status.',
+      errorDetail: error?.message || String(error),
+    });
+  }
+});
+
+// 4. DELETE /api/leads/:id - Delete a lead from the database
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    const leadId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+
+    if (!leadId) {
+      return res.status(400).json({ success: false, message: 'Lead ID is required.' });
+    }
+
+    const [deletedLead] = await db
+      .delete(leads)
+      .where(eq(leads.id, leadId))
+      .returning();
+
+    if (!deletedLead) {
+      return res.status(404).json({ success: false, message: 'Lead not found.' });
+    }
+
+    return res.status(200).json({ success: true, message: 'Lead deleted successfully.' });
+  } catch (error: any) {
+    console.error('❌ Error deleting lead:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal server error while deleting lead.',
       errorDetail: error?.message || String(error),
     });
   }

@@ -1,3 +1,4 @@
+//apps/api/src/db/schema.ts
 import { pgTable, uuid, text, timestamp, boolean, jsonb, pgEnum } from 'drizzle-orm/pg-core';
 
 export const leadStatusEnum = pgEnum('lead_status', [
@@ -72,5 +73,40 @@ export const consultationRequests = pgTable('consultation_requests', {
   companyName: text('company_name'),
   phone: text('phone'),
   discussionTopics: text('discussion_topics').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+export const userRoleEnum = pgEnum('user_role', [
+  'SUPER_ADMIN', 'DEVELOPER', 'SOFTWARE_ENGINEER', 'SALES', 'RECEPTION'
+]);
+
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  role: userRoleEnum('role').default('SOFTWARE_ENGINEER').notNull(),
+  jobTitle: text('job_title'),
+  status: text('status').default('ACTIVE').notNull(),
+  lastLogin: timestamp('last_login'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+export const auditLogs = pgTable('audit_logs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id'),
+  userName: text('user_name').notNull(),
+  action: text('action').notNull(), // e.g. LOGIN, UPDATE_LEAD, CREATE_INSIGHT
+  details: text('details').notNull(),
+  ipAddress: text('ip_address'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const notifications = pgTable('notifications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  message: text('message').notNull(),
+  type: text('type').notNull(), // e.g. LEAD, PROJECT_REQUEST, CONSULTATION, SYSTEM
+  read: boolean('read').default(false).notNull(),
+  referenceId: uuid('reference_id'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });

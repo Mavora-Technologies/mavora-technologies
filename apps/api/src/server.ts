@@ -1,9 +1,16 @@
+// apps/api/src/server.ts
 import express, { Request, Response, NextFunction } from 'express';
 import projectsRouter from './routes/projects';
 import insightsRouter from './routes/insights';
 import leadsRouter from './routes/leads';
+import consultationsRouter from './routes/consultations'; // <--- Added consultations router
+import authRouter from './modules/auth/auth.routes';
+import usersRouter from './modules/users/users.routes';
+import notificationsRouter from './modules/notifications/notifications.routes';
+import auditLogsRouter from './modules/audit-logs/audit-logs.routes';
 import { db } from './db';
 import { projectRequests } from './db/schema';
+import 'dotenv/config';
 
 const app = express();
 
@@ -43,9 +50,15 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 // 3. API Routes
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
 app.use('/api/projects', projectsRouter);
 app.use('/api/insights', insightsRouter);
 app.use('/api/leads', leadsRouter);
+app.use('/api/consultations', consultationsRouter); // <--- Admin portal & API route for consultations
+app.use('/api/consultation', consultationsRouter);  // <--- Frontend client booking endpoint support
+app.use('/api/notifications', notificationsRouter);
+app.use('/api/audit-logs', auditLogsRouter);
 
 // Project Request Endpoint
 app.post('/api/projects/request', async (req: Request, res: Response) => {
@@ -79,34 +92,6 @@ app.post('/api/projects/request', async (req: Request, res: Response) => {
     return res.status(201).json({ success: true, data: newRequest });
   } catch (error) {
     console.error('Error saving project request:', error);
-    return res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
-
-// Consultation Request Endpoint
-app.post('/api/consultation/request', async (req: Request, res: Response) => {
-  try {
-    const { 
-      fullName, 
-      workEmail, 
-      companyName, 
-      phone, 
-      preferredDate, 
-      preferredTimeSlot, 
-      consultationType, 
-      discussionTopics 
-    } = req.body;
-
-    if (!fullName || !workEmail || !preferredDate || !discussionTopics) {
-      return res.status(400).json({ success: false, message: 'Missing required fields' });
-    }
-
-    return res.status(201).json({ 
-      success: true, 
-      message: 'Consultation request received successfully' 
-    });
-  } catch (error) {
-    console.error('Error saving consultation request:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 });

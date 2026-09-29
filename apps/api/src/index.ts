@@ -1,10 +1,11 @@
+//apps/api/src/index.ts
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 import { db } from './db/index.js';
 import { leads, projects, insights, consultationRequests as consultation_requests } from './db/schema.js';
-
+import 'dotenv/config';
 dotenv.config();
 
 const app = express();
